@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{amsmath, url, listings, graphicx}
+\title{Discrete Logarithm Circuits}
+\author{Elliot Snow-Kropla\\Kyriakidis Group}
+%\date{20 July 2012}
+
+\lstset{ %
+	tabsize = 2,
+	frame = single,
+	basicstyle = \ttfamily,
+	escapebegin = <\>
+}
+
+\begin{document}
+\maketitle
+The most straightforward way to make an AQC circuit for a one-way function is to take advantage of the fact that out computations are reversible; thus we just make a circuit for computing the function going the easy way.
+
+\section{Circuits}
+The easy direction for the discrete log problem is modular exponentiation, $c = b^e \text{ (mod }N\text{)}$.  Based on the repeated squares technique for exponentiation, we use the following technique for modular exponentiation\cite{mod_exp}: write $e$ in binary as 
+
+
+\begin{lstlisting}
+def modular_power(b, e, m):
+	r = 1
+	while e > 0:
+		if (e % 2) == 1:
+			r = (r * b) % m
+		e = e >> 1
+		b = (b * b) % m
+	return r
+\end{lstlisting}
+
+
+
+\bibliography{mybib}{}
+\bibliographystyle{plain}
+\end{document}
