@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage{amsmath, url, listings, graphicx}
-\title{Discrete Logarithm Circuits}
+\title{Adiabatic Quantum Computation}
 \author{Elliot Snow-Kropla\\Kyriakidis Group}
 %\date{20 July 2012}
 
@@ -16,6 +16,13 @@
 The most straightforward way to make an AQC circuit for a one-way function is to take advantage of the fact that out computations are reversible; thus we just make a circuit for computing the function going the easy way.
 
 \section{Introduction}
+Computers are very useful (duh).  But some computational problems are impractical to solve on classical computers.
+Peter Shor\cite{shor} showed that a quantum computer could factor integers and calculate the discrete logarithm faster
+than a classical computer could.  So the question becomes, how do we build a quantum computer?  Most quantum computer proposals
+revolve around constructing quantum gates (in analogy with classical logical gates) to manipulate quantum states, but this is
+hard.  The more qubits you add the harder it is to shield your computer from the outside world, so you get more decoherence.  You
+add more qubits to counter-act decoherence ...  So what I've looked at is an alternative approach to building a quantum computer
+based around adiabatic annealing.
 
 \section{Background}
 
@@ -26,6 +33,11 @@ The most straightforward way to make an AQC circuit for a one-way function is to
 \subsection{Adiabatic Quantum Computing}
 
 \section{Quantum Circuit Compilation}
+We need a way of generating Hamiltonians to solve the problems we are trying to solve.  In general, creating a Hamiltonian to solve
+any given problem \emph{ex nihilo} is NP-Hard.  We can build up problem Hamiltonians out of the Hamiltonians of smaller sub-problems.\cite{mccurdy}
+
+Given this, if we can find a Hamiltonian which is universal for computation, we can build up any arbitrary Hamiltonian we need.  The logical
+{\tt NAND} is universal for computation, so if we can encode that we can encode any problem.
 
 \subsection{QSM Language}
 
