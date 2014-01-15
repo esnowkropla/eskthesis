@@ -34,16 +34,22 @@ based around adiabatic annealing.
 
 \section{Quantum Circuit Compilation}
 We need a way of generating Hamiltonians to solve the problems we are trying to solve.  In general, creating a Hamiltonian to solve
-any given problem \emph{ex nihilo} is NP-Hard.  We can build up problem Hamiltonians out of the Hamiltonians of smaller sub-problems.\cite{mccurdy}
+any given problem \emph{ex nihilo} is NP-Hard.  We can build up problem Hamiltonians out of the Hamiltonians of smaller sub-problems.\cite{gluing}
 
 Given this, if we can find a Hamiltonian which is universal for computation, we can build up any arbitrary Hamiltonian we need.  The logical
 {\tt NAND} is universal for computation, so if we can encode that we can encode any problem.
+
+But can we encode problems in such a way that we can solve them faster than classically?
 
 \subsection{QSM Language}
 
 \subsection{Quantum Circuit}
 
 \subsection{Embedding}
+
+\section{Results}
+
+\section{Conclusion}
 
 \begin{lstlisting}
 def modular_power(b, e, m):

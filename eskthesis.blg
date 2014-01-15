@@ -1,48 +1,48 @@
-This is BibTeX, Version 0.99d (TeX Live 2011)
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: eskthesis.aux
 The style file: plain.bst
 Database file #1: mybib.bib
-Warning--I didn't find a database entry for "mccurdy"
-You've used 1 entry,
+Warning--empty journal in gluing
+You've used 2 entries,
             2118 wiz_defined-function locations,
-            503 strings with 4125 characters,
-and the built_in function-call counts, 224 in all, are:
-= -- 20
-> -- 7
+            506 strings with 4182 characters,
+and the built_in function-call counts, 463 in all, are:
+= -- 42
+> -- 20
 < -- 0
-+ -- 3
-- -- 2
-* -- 10
-:= -- 48
-add.period$ -- 3
-call.type$ -- 1
-change.case$ -- 4
++ -- 8
+- -- 6
+* -- 22
+:= -- 92
+add.period$ -- 6
+call.type$ -- 2
+change.case$ -- 9
 chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 10
-empty$ -- 18
-format.name$ -- 2
-if$ -- 42
+cite$ -- 3
+duplicate$ -- 20
+empty$ -- 35
+format.name$ -- 6
+if$ -- 89
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 1
-newline$ -- 8
-num.names$ -- 2
-pop$ -- 4
+int.to.str$ -- 2
+missing$ -- 2
+newline$ -- 13
+num.names$ -- 4
+pop$ -- 11
 preamble$ -- 1
-purify$ -- 3
+purify$ -- 7
 quote$ -- 0
-skip$ -- 7
+skip$ -- 15
 stack$ -- 0
-substring$ -- 5
+substring$ -- 10
 swap$ -- 1
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
-warning$ -- 0
-while$ -- 2
-width$ -- 2
-write$ -- 12
+type$ -- 8
+warning$ -- 1
+while$ -- 4
+width$ -- 3
+write$ -- 21
 (There was 1 warning)
