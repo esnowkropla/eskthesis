@@ -54,6 +54,18 @@ Because in general programs compiled to Ising graphs can be of any shape, we nee
 
 \emph{ Embedding algorithm}
 
+The embedding algorithm is as follows:
+
+\begin{enumerate}
+	\item Designate the input graph $V$ and the destination Chimera graph $G$
+	\item Label the spins in the input graph $V_i$
+	\item Designate the cloning map from a given logical spin to its set of clones $G_i \mapsto [G_0 \ldots G_n] $ Initially, the
+		clone list will contain only the parent logical spin
+	\item Assign each spin $V_i$ to a spin in the left side of a $K_{4,4}$ that lies along the diagonal of $G$
+	\item For each edge $V_{i,j}$ in $V$, iterate pairwise through the clone sets of $G_i,G_j$ until we find the pair $G_x,G_y$ such that
+		the path from $G_x$ to $G_y$ is minimal
+	\item Divide the spins in the path into two groups at the first kink in the path: assign all the spins in one group to 
+\end{enumerate}
 
 \section{Results and Discussion}
 
