@@ -4,3 +4,4 @@ all: eskthesis.tex eskthesis.bbl
 
 eskthesis.bbl: mybib.bib
 	bibtex eskthesis
+	bibtex eskthesis
