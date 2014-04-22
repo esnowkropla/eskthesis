@@ -1,23 +1,37 @@
-\documentclass{article}
-\usepackage{amsmath, url, listings, graphicx}
-\title{Adiabatic Quantum Computation}
-\author{Elliot Snow-Kropla\\Kyriakidis Group}
-%\date{20 July 2012}
-
-\lstset{ %
-	tabsize = 2,
-	frame = single,
-	basicstyle = \ttfamily,
-	escapebegin = <\>
-}
+\documentclass[12pt]{dalthesis}
 
 \begin{document}
-\maketitle
 
-\subsection{Embedding}
+\title{Adiabatic Quantum Computation}
+\author{Elliot Snow-Kropla}
+%\date{20 July 2012}
+
+\degree{Master of Science}
+\degreeinitial{M.Sc.}
+\faculty{Faculty of Science}
+\dept{Department of Physics and Atmospheric Science}
+
+\defencemonth{August}\defenceyear{2014}
+
+\frontmatter
+
+\begin{abstract}
+	Lorum Ipsum
+\end{abstract}
+
+\begin{acknowledgements}
+	Nobody! Hahaha
+\end{acknowledgements}
+
+\mainmatter
+
+\chapter{Introduction}
+Phase transition\cite{PhysRevLett.104.020502}
+
+\chapter{Embedding}
 Because in general programs compiled to Ising graphs can be of any shape, we need a way to convert arbitrary graphs into Chimera graphs that can be executed on a machine.
 
-\emph{ Embedding algorithm}
+\section{ Embedding algorithm}
 
 The embedding algorithm is as follows:
 
@@ -32,6 +46,10 @@ The embedding algorithm is as follows:
 	\item Divide the spins in the path into two groups at the first kink in the path: assign all the spins in one group to 
 \end{enumerate}
 
-\bibliography{mybib}{}
+\chapter{Preliminary Results}
+
+Figure FIXME shows the results of 50,000 runs of the annealing machine consisting of 1000 runs at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.
+
 \bibliographystyle{plain}
+\bibliography{eskthesis}
 \end{document}
