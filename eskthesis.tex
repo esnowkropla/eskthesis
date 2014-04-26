@@ -26,7 +26,9 @@
 \mainmatter
 
 \chapter{Introduction}
-Phase transition\cite{PhysRevLett.104.020502}
+
+\chapter{Adiabatic Quantum Computing}
+Introduced by Farhi et.\ al.\cite{farhi}, the idea of adiabatic quantum computation (hereafter AQC) is to exploit the adiabatic theorem to solve computational problems.  There are two main components to the idea.  First, we find a Hamiltonian such that the ground state is the solution to a computational problem (e.g. a bitstring of spins pointed up and down).  Second, we use the adiabatic theorem to move from some easily prepared initial state into the Hamiltonian we found.
 
 \chapter{Embedding}
 Because in general programs compiled to Ising graphs can be of any shape, we need a way to convert arbitrary graphs into Chimera graphs that can be executed on a machine.
@@ -48,7 +50,15 @@ The embedding algorithm is as follows:
 
 \chapter{Preliminary Results}
 
-Figure FIXME shows the results of 50,000 runs of the annealing machine consisting of 1000 runs at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.
+Figure FIXME shows the results of 50,000 runs of the annealing machine consisting of 1000 runs at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.  This unexpected behaviour leaves us with a number of questions:
+
+\begin{itemize}
+	\item For long annealing times, why does the fidelity decrease with increasing annealing times?
+	\item For short annealing times, why does the fidelity appear insensitive to annealing time?
+	\item Is the short time fidelity dominated by the Hamiltonian programming noise?
+	\item Is there significant drift in the fidelities after programming?
+	\item Does the Hamiltonian fidelity depend strongly on the number of coupling values?
+\end{itemize}
 
 \bibliographystyle{plain}
 \bibliography{eskthesis}
