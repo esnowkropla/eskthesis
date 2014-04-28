@@ -43,22 +43,33 @@ where $\sigma_i^Z$ is the pauli matrix of the ith particle and $h_i$ and $J_{ij}
 \section{Adiabatic Evolution}
 
 \chapter{Embedding}
-Because in general programs compiled to Ising graphs can be of any shape, we need a way to convert arbitrary graphs into Chimera graphs that can be executed on a machine.
+Because in general programs compiled to Ising graphs can be of any shape, we need a way to convert arbitrary graphs into Chimera graphs that can be executed on a machine.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.
 
 \section{ Embedding algorithm}
 
 The embedding algorithm is as follows:
 
+\emph{\textbf{Definitions:}}
+
+Designate the input Hamiltonian graph $V$ and the output Chimera graph $G$.  Label the spins in $V$ and $G$ as $V_i$ and $G_i$ respectively.
+We define the \emph{clone map} $C_i$ as the set of spins $[i,j \ldots]$ which have the same logical value as their parent spin: so for example the clone map of spin 5, $C_5$, might be $[2,3,13]$ which would mean that spins 2, 3, 5 and 13 all share the same logical value.  We define a mapping between logical spins in graph $V$ and computation spins in graph $G$, $M$.  
+
+We also define a \emph{clone coupling} value which is as large as possible and ferromagnetic; this attempts to ensure that all the members of a clone map are aligned in the ground state.  In the final $G$, each member of a clone map should have a clone coupling connecting it to at least one other member of the clone map.
+
+\emph{\textbf{Procedure:}}
 \begin{enumerate}
-	\item Designate the input graph $V$ and the destination Chimera graph $G$
-	\item Label the spins in the input graph $V_i$
-	\item Designate the cloning map from a given logical spin to its set of clones $G_i \mapsto [G_0 \ldots G_n] $ Initially, the
-		clone list will contain only the parent logical spin
-	\item Assign each spin $V_i$ to a spin in the left side of a $K_{4,4}$ that lies along the diagonal of $G$
-	\item For each edge $V_{i,j}$ in $V$, iterate pairwise through the clone sets of $G_i,G_j$ until we find the pair $G_x,G_y$ such that
-		the path from $G_x$ to $G_y$ is minimal
-	\item Divide the spins in the path into two groups at the first kink in the path: assign all the spins in one group to 
+	\item Populate $M$ by mapping each $V_i$ to one of the spins $G_j$ on the left side of a qubyte that lies along the diagonal of $G$
+	\item For each field term in $V$, add a field to $G$ on the corresponding spin
+	\item For each $J_{ij}$ in $V$, conduct the following operation:
+		\begin{itemize}
+			\item Scan through both of $C_i$ and $C_j$ to find the pair which are nearest to each other in $G$; call these $x$ and $y$
+			\item Get a list of each spin that lies along the path between $x$ and $y$
+			\item Assign half of these spins to $C_i$ and half to $C_j$; add the appropriate clone coupling into $G$ for each spin in the path to ensure that the clone map is properly connected
+			\item Finally, at the interface between the two new clone map members, add a coupling into $G$ with the same value as $J_ij$
+		\end{itemize}
 \end{enumerate}
+
+Each term in $V$, both fields and couplings, should now have a corresponding term in $G$.  $G$ should also contain many coupling terms that group the necessary clone maps.
 
 \chapter{Preliminary Results}
 
