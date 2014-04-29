@@ -1,5 +1,5 @@
 \documentclass[12pt]{dalthesis}
-\usepackage{amsmath}
+\usepackage{amsmath,graphicx}
 
 \begin{document}
 
@@ -40,6 +40,8 @@ While in principle there are an unlimited number of ways to construct a Hamilton
 
 where $\sigma_i^Z$ is the pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant "field" spin.
 
+Our problem of finding a suitable Hamiltonian is now reduced to finding a set of $h$'s and $J_{ij}$'s such that our desired solution is encoded in the ground state.
+
 \section{Adiabatic Evolution}
 
 \chapter{Embedding}
@@ -52,7 +54,7 @@ The embedding algorithm is as follows:
 \emph{\textbf{Definitions:}}
 
 Designate the input Hamiltonian graph $V$ and the output Chimera graph $G$.  Label the spins in $V$ and $G$ as $V_i$ and $G_i$ respectively.
-We define the \emph{clone map} $C_i$ as the set of spins $[i,j \ldots]$ which have the same logical value as their parent spin: so for example the clone map of spin 5, $C_5$, might be $[2,3,13]$ which would mean that spins 2, 3, 5 and 13 all share the same logical value.  We define a mapping between logical spins in graph $V$ and computation spins in graph $G$, $M$.  
+We define the \emph{clone map} $C_i$ as the set of spins $[i,j \ldots]$ which have the same logical value as their parent spin: so for example the clone map of spin 5, $C_5$, might be $[2,3,13]$ which would mean that spins 2, 3, 5 and 13 all share the same logical value.  We define a mapping $M$ between logical spins in graph $V$ and computation spins in graph $G$.  
 
 We also define a \emph{clone coupling} value which is as large as possible and ferromagnetic; this attempts to ensure that all the members of a clone map are aligned in the ground state.  In the final $G$, each member of a clone map should have a clone coupling connecting it to at least one other member of the clone map.
 
@@ -65,7 +67,7 @@ We also define a \emph{clone coupling} value which is as large as possible and f
 			\item Scan through both of $C_i$ and $C_j$ to find the pair which are nearest to each other in $G$; call these $x$ and $y$
 			\item Get a list of each spin that lies along the path between $x$ and $y$
 			\item Assign half of these spins to $C_i$ and half to $C_j$; add the appropriate clone coupling into $G$ for each spin in the path to ensure that the clone map is properly connected
-			\item Finally, at the interface between the two new clone map members, add a coupling into $G$ with the same value as $J_ij$
+			\item Finally, at the interface between the two new clone map members, add a coupling into $G$ with the same value as $J_{ij}$
 		\end{itemize}
 \end{enumerate}
 
@@ -73,7 +75,12 @@ Each term in $V$, both fields and couplings, should now have a corresponding ter
 
 \chapter{Preliminary Results}
 
-Figure FIXME shows the results of 50,000 runs of the annealing machine consisting of 1000 runs at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.  This unexpected behaviour leaves us with a number of questions:
+\begin{figure}
+	\caption[Fidelity vs Time]{Plot of the fidelity as a function of annealing time for the Hamiltonian ``k44'' from several different machine runs.}
+	\label{fid_v_time}
+\end{figure}
+
+Figure \ref{fid_v_time} shows the results of 50,000 runs of the annealing machine consisting of 1000 runs at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.  This unexpected behaviour leaves us with a number of questions:
 
 \begin{itemize}
 	\item For long annealing times, why does the fidelity decrease with increasing annealing times?
