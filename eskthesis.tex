@@ -1,9 +1,9 @@
 \documentclass[12pt]{dalthesis}
-\usepackage{amsmath,graphicx}
+\usepackage{amsmath,graphicx,braket}
 
 \begin{document}
 
-\title{Adiabatic Quantum Computation}
+\title{An investigation into the properties of a physical adiabatic quantum computer}
 \author{Elliot Snow-Kropla}
 %\date{20 July 2012}
 
@@ -17,16 +17,28 @@
 \frontmatter
 
 \begin{abstract}
-	Lorum Ipsum
+
 \end{abstract}
 
 \begin{acknowledgements}
-	Nobody! Hahaha
 \end{acknowledgements}
 
 \mainmatter
 
 \chapter{Introduction}
+
+\section{Classical Computing}
+
+\section{Feynman to Shor}
+
+\section{The Adiabatic Theorem}
+The adiabatic theorem states that if a system is initially prepared in the $ith$ energy level, and the Hamiltonian is evolved according to the adiabatic condition, the system will remain in the $ith$ state after the evolution.  The adiabatic condition is given as:
+
+\begin{displaymath}
+	\left | \frac{1}{\omega_{fi}}\frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right | << |E_f - E_i|
+\end{displaymath}
+
+where $E_i$ and $E_f$ are the energies of the initial and final states, $\hat{V}(t)$ is the time dependant part of the Hamiltonian and $\omega_{if} = \frac{E_f - E_i}{\hbar}$ is a convenient variable.  This (FIXME missing!) derivation due to \cite{zettili}.
 
 \chapter{Adiabatic Quantum Computing}
 Introduced by Farhi et.\ al.\cite{farhi}, the idea of adiabatic quantum computation (hereafter AQC) is to exploit the adiabatic theorem to solve computational problems.  There are two main components to the idea.  First, we find a Hamiltonian such that the ground state is the solution to a computational problem (e.g. a bitstring of spins pointed up and down).  Second, we use the adiabatic theorem to move from some easily prepared initial state into the Hamiltonian we found.
@@ -35,14 +47,22 @@ Introduced by Farhi et.\ al.\cite{farhi}, the idea of adiabatic quantum computat
 While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
 
 \begin{displaymath}
-	H = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z
+	H = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
 \end{displaymath}
-
 where $\sigma_i^Z$ is the pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant "field" spin.
 
 Our problem of finding a suitable Hamiltonian is now reduced to finding a set of $h$'s and $J_{ij}$'s such that our desired solution is encoded in the ground state.  We do this by breaking our problem down into sub-problems and finding Hamiltonians for these easier sub-problems, and then reassembling these smaller Hamiltonians into the final problem Hamiltonian using the gluing theorem.\cite{gluing}
 
-Figure FIXME shows a Hamiltonian graph describingthe $h_i$s and $J_{ij}$s to encodethelogicofa NAND gate.
+Figure FIXME shows a Hamiltonian graph describing the $h_i$'s and $J_{ij}$'s to encode the logic of a NAND gate.  Because NAND's are universal for computation, combining this graph with the gluing theorem allows us to encode the evaluation of any computable function into the ground state of a Hamiltonian of the general form we described above.  
+
+We don't expect this encoding using NANDs glued together to be either optimal in the sense of using fewest spins or couplings, or to be asymptotically faster than an equivalent classical circuit.  We have no general solution for the first problem; each computational problem we want to encode efficiently requires it's own bespoke encoding.  To solve the second problem we take advantage of the fact that quantum mechanics is time-reversible: which variables are output and which are input is arbitrary.  Thus if we have a solution in mind for a given problem we can simply encode the Hamiltonian ``backwards'' and recover answers that would lead to our initial solution.  For NP problems, where verifying a solution is in P, we can thus write a verification circuit with a solution of \texttt{true} and find the inputs to our NP problem.
+
+Our approach to solving NP problems is thus:
+\begin{itemize}
+	\item Construct a circuit to verify a candidate solution (for satisfiability this would be evaluation of the clauses; for factoring this would be a multiplication circuit)
+	\item Clamp the ``output'' spins to their required values (for a satisfiability problem this would be all output spins \texttt{true}; for a factoring problem this the number to factor)
+	\item Run the adiabatic computer and read off the ``input'' spins
+\end{itemize}
 
 \section{Adiabatic Evolution}
 
@@ -75,17 +95,19 @@ We also define a \emph{clone coupling} value which is as large as possible and f
 
 Each term in $V$, both fields and couplings, should now have a corresponding term in $G$.  $G$ should also contain many coupling terms that group the necessary clone maps.
 
+\chapter{The \texttt{VESUVIUS} Machine}
+
 \chapter{Preliminary Results}
 
-\begin{figure}
-	\scalebox{0.3}{
-	\includegraphics[bb=0 0 745 382]{img/6_018_comparison.png}
+\begin{figure}[h]
+	\scalebox{0.6}{
+	\includegraphics[bb=0 0 800 600]{img/6_018_2_fidelity.png}
 }
-	\caption[Fidelity vs Time]{Plot of the fidelity as a function of annealing time for the Hamiltonian ``k44'' from several different machine runs.}
-	\label{fig:fid_v_time}
+	\caption[Fidelity vs Time]{Plot of the fidelity as a function of annealing time for the Hamiltonian ``6\_018'' both linear and log-scaled x-axis.}
+	\label{fig:fidelity}
 \end{figure}
 
-Figure \ref{fig:fid_v_time} shows the results of 50,000 runs of the annealing machine consisting of 1000 runs at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.  This unexpected behaviour leaves us with a number of questions:
+Figure \ref{fig:fidelity} shows the results of 50,000 runs of the annealing machine consisting of 1000 runs at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.  This unexpected behaviour leaves us with a number of questions:
 
 \begin{itemize}
 	\item For long annealing times, why does the fidelity decrease with increasing annealing times?
@@ -94,6 +116,26 @@ Figure \ref{fig:fid_v_time} shows the results of 50,000 runs of the annealing ma
 	\item Is there significant drift in the fidelities after programming?
 	\item Does the Hamiltonian fidelity depend strongly on the number of coupling values?
 \end{itemize}
+
+\section{Short Evolution}
+\begin{figure}
+	\scalebox{0.35}{
+		\includegraphics[bb= 0 0 745 382]{img/6_018_comparison.png}
+	}
+	\caption[Short Time Fidelities]{The fidelity as a function of time for the Hamiltonian ``6\_018'' for several different machine runs.  Each data point consist of 1000 machine reads.  Notice the spread between machine runs is outside of the error bars.}
+	\label{fig:short_fidelity}
+\end{figure}
+As can be seen in Figure \ref{fig:short_fidelity}, there is considerable noise in the fidelities between different machine runs.  The fidelity is determined by computing the fraction of machine reads that return a ground state.  If the assumptions of AQC hold, then the fidelity should depend on only the annealing time.  If this is the case, then we expect that the measured fidelities obey a binomial distribution (think of the machine as essentially a biased coin, with \texttt{HEADS} being the ground state and \texttt{TAILS} being an excited state).  
+
+To explain this discrepancy we look at a histogram of each fidelity found during the short anneal, Figure \ref{fig:fid_hist}.  Each count in this histogram is a fidelity from a machine run consisting of 1000 machine reads.  This is gently consistent with the noise in the fidelities occurring in the Hamiltonian programming step; that is, the Hamiltonian the machine is evaluating being different from the Hamiltonian we desire.
+
+\begin{figure}
+	\scalebox{0.75}{
+		\includegraphics[bb= 0 0 800 600]{img/4_5_hist.png}
+	}
+	\caption[Short Time Fidelity Histogram]{Histogram of the fidelities found for all annealing times  $< 500 \mu$s.  Notice the gaussian like structure.}
+	\label{fig:fid_hist}
+\end{figure}
 
 \bibliographystyle{plain}
 \bibliography{eskthesis}
