@@ -54,7 +54,16 @@ where $\sigma_i^Z$ is the pauli matrix of the ith particle and $h_i$ and $J_{ij}
 
 Our problem of finding a suitable Hamiltonian is now reduced to finding a set of $h$'s and $J_{ij}$'s such that our desired solution is encoded in the ground state.  We do this by breaking our problem down into sub-problems and finding Hamiltonians for these easier sub-problems, and then reassembling these smaller Hamiltonians into the final problem Hamiltonian using the gluing theorem.\cite{gluing}
 
-Figure FIXME shows a Hamiltonian graph describing the $h_i$'s and $J_{ij}$'s to encode the logic of a NAND gate.  Because NAND's are universal for computation, combining this graph with the gluing theorem allows us to encode the evaluation of any computable function into the ground state of a Hamiltonian of the general form we described above.  
+Figure \ref{fig:nand_graph} shows a Hamiltonian graph describing the $h_i$'s and $J_{ij}$'s to encode the logic of a NAND gate.  Because NAND's are universal for computation, combining this graph with the gluing theorem allows us to encode the evaluation of any computable function into the ground state of a Hamiltonian of the general form we described above.  
+
+\begin{figure}
+	%\scalebox{}{
+	%	\includegraphics[]{}
+	%}
+	\caption[\texttt{NAND} Graph]{Graphical representation of the Hamiltonian implementing the logic of a \texttt{NAND} gate.}
+	\label{fig:nand_graph}
+\end{figure}
+
 
 We don't expect this encoding using NANDs glued together to be either optimal in the sense of using fewest spins or couplings, or to be asymptotically faster than an equivalent classical circuit.  We have no general solution for the first problem; each computational problem we want to encode efficiently requires it's own bespoke encoding.  To solve the second problem we take advantage of the fact that quantum mechanics is time-reversible: which variables are output and which are input is arbitrary.  Thus if we have a solution in mind for a given problem we can simply encode the Hamiltonian ``backwards'' and recover answers that would lead to our initial solution.  For NP problems, where verifying a solution is in P, we can thus write a verification circuit with a solution of \texttt{true} and find the inputs to our NP problem.
 
@@ -118,7 +127,7 @@ Figure \ref{fig:fidelity} shows the results of 50,000 runs of the annealing mach
 	\item Does the Hamiltonian fidelity depend strongly on the number of coupling values?
 \end{itemize}
 
-\section{Short Evolution}
+\section{Short-time Evolution}
 \begin{figure}
 	\scalebox{0.35}{
 		\includegraphics[bb= 0 0 745 382]{img/6_018_comparison.png}
@@ -130,13 +139,33 @@ As can be seen in Figure \ref{fig:short_fidelity}, there is considerable noise i
 
 To explain this discrepancy we look at a histogram of each fidelity found during the short anneal, Figure \ref{fig:fid_hist}.  Each count in this histogram is a fidelity from a machine run consisting of 1000 machine reads.  This is gently consistent with the noise in the fidelities occurring in the Hamiltonian programming step; that is, the Hamiltonian the machine is evaluating being different from the Hamiltonian we desire.
 
-\begin{figure}
+\begin{figure}[h]
 	\scalebox{0.75}{
 		\includegraphics[bb= 0 0 800 600]{img/4_5_hist.png}
 	}
 	\caption[Short Time Fidelity Histogram]{Histogram of the fidelities found for all annealing times  $< 500 \mu$s.  Notice the gaussian like structure.}
 	\label{fig:fid_hist}
 \end{figure}
+
+\section{Long-time Evolution}
+For a purely quantum system the fidelity should increase in the limit of increasing annealing time.  What we see instead in the actual data is that the fidelity appears to approach zero as the annealing time increases.  The physical computer is not an ideal quantum system, so to model it correctly we need to account for noise and decoherence sources.
+
+\begin{figure}
+	%\scalebox{0.75}{
+	%	\includegraphics[]{}
+	%}
+	\caption[Simulation of Schr\"odinger's Equation]{Numerical integration of Schr\"odinger's Equation for the Hamiltonian ``k44'' showing the fidelity increasing to a plateau as the annealing time increases.}
+	\label{fig:simulated_anneal}
+\end{figure}
+
+\begin{figure}
+	%\scalebox{0.75}{
+	%	\includegraphics{img/k44_comparison.pdf}
+	%}
+	\caption[Long Time Anneal]{Machine data from Hamiltonian ``k44'' with 100 runs of 1000 reads showing the Hamiltonian noise at short times and the fidelity drop at long anneal times.}
+	\label{fig:k44_long}
+\end{figure}
+
 
 \bibliographystyle{plain}
 \bibliography{eskthesis}
