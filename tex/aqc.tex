@@ -12,7 +12,16 @@ where $\sigma_i^Z$ is the pauli matrix of the ith particle and $h_i$ and $J_{ij}
 
 Our problem of finding a suitable Hamiltonian is now reduced to finding a set of $h$'s and $J_{ij}$'s such that our desired solution is encoded in the ground state.  We do this by breaking our problem down into sub-problems and finding Hamiltonians for these easier sub-problems, and then reassembling these smaller Hamiltonians into the final problem Hamiltonian using the gluing theorem.\cite{gluing}
 
-Figure FIXME shows a Hamiltonian graph describing the $h_i$'s and $J_{ij}$'s to encode the logic of a NAND gate.  Because NAND's are universal for computation, combining this graph with the gluing theorem allows us to encode the evaluation of any computable function into the ground state of a Hamiltonian of the general form we described above.  
+Figure \ref{fig:nand_graph} shows a Hamiltonian graph describing the $h_i$'s and $J_{ij}$'s to encode the logic of a NAND gate.  Because NAND's are universal for computation, combining this graph with the gluing theorem allows us to encode the evaluation of any computable function into the ground state of a Hamiltonian of the general form we described above.  
+
+\begin{figure}
+	%\scalebox{}{
+	%	\includegraphics[]{}
+	%}
+	\caption[\texttt{NAND} Graph]{Graphical representation of the Hamiltonian implementing the logic of a \texttt{NAND} gate.}
+	\label{fig:nand_graph}
+\end{figure}
+
 
 We don't expect this encoding using NANDs glued together to be either optimal in the sense of using fewest spins or couplings, or to be asymptotically faster than an equivalent classical circuit.  We have no general solution for the first problem; each computational problem we want to encode efficiently requires it's own bespoke encoding.  To solve the second problem we take advantage of the fact that quantum mechanics is time-reversible: which variables are output and which are input is arbitrary.  Thus if we have a solution in mind for a given problem we can simply encode the Hamiltonian ``backwards'' and recover answers that would lead to our initial solution.  For NP problems, where verifying a solution is in P, we can thus write a verification circuit with a solution of \texttt{true} and find the inputs to our NP problem.
 
