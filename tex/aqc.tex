@@ -33,3 +33,8 @@ Our approach to solving NP problems is thus:
 \end{itemize}
 
 \section{Adiabatic Evolution}
+Once we have a Hamiltonian whose ground state encodes the problem we would like to solve, we need to set up the evolution.  The Adiabatic Theorem lets us transition from the ground state of one Hamiltonian to another, so we need an initial Hamiltonian.  In general almost any Hamiltonian which we know the ground state of will work, and we know that the choice of initial Hamiltonian affects the evolution in ways we can't predict.  For simplicity however, we use the following initial Hamiltonian:
+\begin{displaymath}
+	H = \sum_i^N B \sigma_i^x
+\end{displaymath}
+which has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm Z}$).
