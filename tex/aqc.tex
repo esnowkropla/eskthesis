@@ -6,7 +6,7 @@ Introduced by Farhi et.\ al.\cite{farhi}, the idea of adiabatic quantum computat
 While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
 
 \begin{displaymath}
-	H = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
+	H_f = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
 \end{displaymath}
 where $\sigma_i^Z$ is the pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant "field" spin.
 
@@ -35,6 +35,14 @@ Our approach to solving NP problems is thus:
 \section{Adiabatic Evolution}
 Once we have a Hamiltonian whose ground state encodes the problem we would like to solve, we need to set up the evolution.  The Adiabatic Theorem lets us transition from the ground state of one Hamiltonian to another, so we need an initial Hamiltonian.  In general almost any Hamiltonian which we know the ground state of will work, and we know that the choice of initial Hamiltonian affects the evolution in ways we can't predict.  For simplicity however, we use the following initial Hamiltonian:
 \begin{displaymath}
-	H = \sum_i^N B \sigma_i^x
+	H_i = \sum_i^N B \sigma_i^x
 \end{displaymath}
-which has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm Z}$).
+which has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm Z}$).  This is easy to prepare by applying a large magnetic field along the negative x direction.
+Once we've assembled both our initial and final Hamiltonians, we can conduct the evolution.  We call the total Hamiltonian $H_{TOT}$, and it is simply the sum of the initial and final Hamiltonian:
+
+\begin{displaymath}
+	H_{tot} = f(t)H_i + g(t)H_f
+\end{displaymath}
+
+where $f$ and $g$ are dimensionless functions of time such that $f(0) = g(T) = 1$ and $f(T) = g(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $f$ and $g$ describe the \emph{evolution trajectory}.  Because the fidelity depends on the energy gap $\Delta$, and $\Delta$ depends on the Hamiltonian trajectory, what we choose for these functions dramatically changes the success of our computation.
+The simplest and most obvious trajectory is $f(t) = t/T$ and $g(t) = 1 - t/T$ or straight line paths.
