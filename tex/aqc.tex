@@ -38,11 +38,11 @@ Once we have a Hamiltonian whose ground state encodes the problem we would like 
 	H_i = \sum_i^N B \sigma_i^x
 \end{displaymath}
 which has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm Z}$).  This is easy to prepare by applying a large magnetic field along the negative x direction.
-Once we've assembled both our initial and final Hamiltonians, we can conduct the evolution.  We call the total Hamiltonian $H_{TOT}$, and it is simply the sum of the initial and final Hamiltonian:
+Once we've assembled both our initial and final Hamiltonians, we can conduct the evolution.  We call the total Hamiltonian $H_{tot}$, and it is simply the sum of the initial and final Hamiltonian:
 
 \begin{displaymath}
 	H_{tot} = f(t)H_i + g(t)H_f
 \end{displaymath}
 
 where $f$ and $g$ are dimensionless functions of time such that $f(0) = g(T) = 1$ and $f(T) = g(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $f$ and $g$ describe the \emph{evolution trajectory}.  Because the fidelity depends on the energy gap $\Delta$, and $\Delta$ depends on the Hamiltonian trajectory, what we choose for these functions dramatically changes the success of our computation.
-The simplest and most obvious trajectory is $f(t) = t/T$ and $g(t) = 1 - t/T$ or straight line paths.
+The simplest and most obvious trajectory is $f(t) = t/T$ and $g(t) = 1 - t/T$, or straight line paths.
