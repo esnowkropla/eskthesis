@@ -1,5 +1,18 @@
 \chapter{Adiabatic Quantum Computing}
+
+\section{The Adiabatic Theorem}
+
 The idea of adiabatic quantum computation (hereafter AQC) is to exploit the adiabatic theorem to solve computational problems.  There are two main components to the idea.  First, we find a Hamiltonian such that the ground state is the solution to a computational problem (e.g. a bitstring of spins pointed up and down).  Second, we use the adiabatic theorem to move from some easily prepared initial state into the Hamiltonian we found.
+
+The adiabatic theorem states that if a system is initially prepared in the ith energy level, and the Hamiltonian is evolved according to the adiabatic condition, the system will remain in the ith state after the evolution.  The adiabatic condition is:
+
+\begin{displaymath}
+	\left | \frac{1}{\omega_{fi}}\frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right | << |E_f - E_i|
+\end{displaymath}
+
+where $E_i$ and $E_f$ are the energies of the initial and final states, $\hat{V}(t)$ is the time dependant part of the Hamiltonian and $\omega_{if} = \frac{E_f - E_i}{\hbar}$ is a convenient variable.  This (FIXME missing! also maybe put the derivation in an appendix) derivation due to \cite{zettili}.
+
+So if the speed at which the Hamiltonian changes (the derivative term) is slow enough, and the gap between the initial state and the other states ($E_f - E_i$) is large enough, then the system won't transition into a new state.
 
 \section{Finding a Problem Hamiltonian}
 While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
@@ -7,7 +20,7 @@ While in principle there are an unlimited number of ways to construct a Hamilton
 \begin{displaymath}
 	H_f = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
 \end{displaymath}
-where $\sigma_i^Z$ is the pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant "field" spin.
+where $\sigma_i^Z$ is the z-pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant "field" spin.
 
 Our problem of finding a suitable Hamiltonian is now reduced to finding a set of $h$'s and $J_{ij}$'s such that our desired solution is encoded in the ground state.  We do this by breaking our problem down into sub-problems and finding Hamiltonians for these easier sub-problems, and then reassembling these smaller Hamiltonians into the final problem Hamiltonian using the gluing theorem.\cite{gluing}
 
