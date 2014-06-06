@@ -9,7 +9,8 @@ The embedding algorithm is as follows:
 \emph{\textbf{Definitions:}}
 
 Designate the input Hamiltonian graph $V$ and the output Chimera graph $G$.  Label the spins in $V$ and $G$ as $V_i$ and $G_i$ respectively.
-We define the \emph{clone map} $C_i$ as the set of spins $[i,j \ldots]$ which have the same logical value as their parent spin: so for example the clone map of spin 5, $C_5$, might be $[2,3,13]$ which would mean that spins 2, 3, 5 and 13 all share the same logical value.  We define a mapping $M$ between logical spins in graph $V$ and computation spins in graph $G$.  
+We define the \emph{clone map} $C_i$ as the set of spins $[i,j \ldots]$ which have the same logical value as their parent spin: so for example the clone map of spin 5, $C_5$, might be $[2,3,13]$ which would mean that spins 2, 3, 5 and 13 all share the same logical value.  
+We define a mapping $M$ between logical spins in graph $V$ and computation spins in graph $G$.  That is, spin $V_{12}$ representing the 12th variable in a SAT problem might be mapped to $G_{187}$, the 187th machine spin.
 
 We also define a \emph{clone coupling} value which is as large as possible and ferromagnetic; this attempts to ensure that all the members of a clone map are aligned in the ground state.  In the final $G$, each member of a clone map should have a clone coupling connecting it to at least one other member of the clone map.
 
@@ -26,6 +27,15 @@ We also define a \emph{clone coupling} value which is as large as possible and f
 		\end{itemize}
 \end{enumerate}
 
-Each term in $V$, both fields and couplings, should now have a corresponding term in $G$.  $G$ should also contain many coupling terms that group the necessary clone maps.
+Each term in $V$, both fields and couplings, should now have a corresponding term in $G$.  $G$ should also contain many coupling terms that group the necessary clone maps.  Figure \ref{fig:embedding} shows an example of the embedding process.
 
-This algorithm is tailored AQC machines whose qubits are arranged in a square shape, however, the principle should be easily generalizable: 
+
+\begin{figure}
+	%\scalebox{}{
+	%	\includegraphics[]{}
+	%}
+	\caption[Embedding Algorithm]{This figure shows three steps of the embedding algorithm: mapping spins from $V$ to $G$, tracing the path for the clones between $V_i$ and $G_j$ and partitioning the path into $C_i$ and $C_j$.}
+	\label{fig:embedding}
+\end{figure}
+
+This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the Chimera graph), however, the principle should be easily generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead.
