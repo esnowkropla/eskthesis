@@ -2,14 +2,16 @@
 \label{chap:prelim}
 
 \begin{figure}
-	\scalebox{0.6}{
+	\scalebox{0.75}{
 	\includegraphics[bb=0 0 800 600]{img/6_018_2_fidelity.png}
 }
 	\caption[Fidelity vs Time]{Plot of the fidelity as a function of annealing time for the Hamiltonian ``6\_018'' both linear and log-scaled x-axis.}
 	\label{fig:fidelity}
 \end{figure}
 
-Figure \ref{fig:fidelity} shows the results of 50,000 runs of the annealing machine consisting of 50 runs with 1000 reads at various annealing times.  Along the y-axis is the fidelity, and along the x-axis is the annealing time.  Contrary to what we expect from the adiabatic theorem and simulations of quantum annealing the fidelity is uncorrelated with annealing from 20$\mu$s out to roughly 500$ \mu$s, after which the fidelity \emph{decreases} with increasing annealing time.  This unexpected behaviour leaves us with a number of questions:
+Preliminary results were gathered on a sample quasi-random Hamiltonian called ``6\_018''.  This problem Hamiltonian was built up of clusters of clause sub-Hamiltonians in the same way as a SAT solver Hamiltonian would be, although ``6\_018'' does not encode a actual SAT problem.  This Hamiltonian was simple to generate and allowed us to verify our procedure for analyzing AQC results.
+Data was collected in a series of evolutions at annealing times ranging from 20 $\mu$s to 20 ms.  Each evolution consists of choosing an anneal time and programming the problem Hamiltonian onto the hardware, then annealing 1000 times successively and reading out the final states.  We call each of these individual evaluations a \emph{read}, and a whole sequence of reads with the same programmed Hamiltonian a \emph{run}.  Any programming error (see \ref{sec:noise}) in the Hamiltonian should be the same between reads and differ between runs.
+The estimated fidelity at each anneal time is the fraction of reads that returned (one of the) ground state(s).  The error is estimated by modelling the read process as a biased coin, with a probability $p$ of returning heads (the ground state), and a probability $1-p$ of returning tails (any other state).  This gives us a binomial distribution, which has a variance of $np(1-p)$ for $n$ trials.  
 
 \begin{itemize}
 	\item For short annealing times, why does the fidelity appear insensitive to annealing time?
@@ -24,22 +26,7 @@ or in short: Our theoretical model of quantum annealing suggests that the fideli
 \emph{Why does the machine behave in this way contrary to our expectations?  Why does the short-anneal fidelity vary so much, and why does the long-anneal fidelity decrease rather than increase?}
 
 \section{Short-time Evolution}
-The data for short time evolution is inconsistent with the fidelity being a function of nothing but annealing time.  The fidelity between different runs varies significantly more than the standard deviation determined from averaging the reads.  Thus, there must be some other factor dominating the fidelity.  Options include:
 
-\begin{itemize}
-	\item Run noise in the machine: that is, each time the physical Hamiltonian is implemented the actual values of the fields and couplings are different, producing a different Hamiltonian every time.  This would mean that within a given run we see a consistent fidelity, but between runs we don't
-	\item Our Hamiltonians might have too many coupling values, and resolution issues on the machine could be exacerbating the run noise
-\end{itemize}
-
-Our plan to resolve this question is to run smaller and simpler Hamiltonians until we can see smooth fidelity curves at small annealing times, or our Hamiltonians are so simple (i.e. 2-spin ferromagnetic ground states) that we are convinced the run noise is intrinsic.  By smaller and simpler, we mean (in order of increasing complexity):
-
-\begin{itemize}
-	\item Hamiltonians with no clones and \emph{no} couplings, only fields
-	\item Hamiltonians with couplings lying in the range $\pm 1$
-	\item Hamiltonians with clones
-	\item Hamiltonians larger than a single k44
-	\item Hamiltonians containing clone chains
-\end{itemize}
 
 \section{Long-time Evolution}
 For a purely quantum system the fidelity should increase in the limit of increasing annealing time.  What we see instead in the actual data is that the fidelity appears to approach zero as the annealing time increases.  The physical computer is not an ideal quantum system, so to model it correctly we need to account for noise and decoherence sources.
