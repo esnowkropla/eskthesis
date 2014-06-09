@@ -1,4 +1,5 @@
 \chapter{The \texttt{VESUVIUS} Machine}
+\label{chap:machine}
 
 \section{Machine Variables}
 The \texttt{VESUVIUS} machine on which our experiments were conducted is composed of 512 rf-SQUID superconducting qubits of the type described in \cite{qubit} \cite{dwave_nature}. It is the same phsyical machine as the larger of the two machines described in \cite{pudenz}.
@@ -17,5 +18,6 @@ Unfortunately we don't know exactly how the coercion is done; it seems reasonabl
 The linear spacing of the machine implemented couplings implies that Hamiltonians with couplings that linearly fill the range from $-C_{max}$ to $C_{max}$ will be least affected by the coercing issue, while those Hamiltonians which have gaps between coupling values or other spacings will be most impacted by the effects of finite machine resolution.
 
 \section{Programming Noise}
+\label{sec:noise}
 The resolution issue is exacerbated by the fact that there is some error in the programming of each coupling (or field).  The magnitude of this error is uncertain; efforts are underway to quantify how much error is consistent with results from the machine \cite{aaron}.
 The preliminary results in Chapter \ref{chap:prelim} suggest that the programming noise is in the neighbourhood of the machine coupling spacing, i.e. 1/7 of $g(t)$.
