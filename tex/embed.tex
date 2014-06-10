@@ -1,8 +1,39 @@
 \chapter{Embedding}
-Because in general programs compiled to Ising graphs can be of any shape, we need a way to convert arbitrary graphs into Chimera graphs that can be executed on a machine.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  We expect that translating complete graphs onto graphs with constant neighbour counts to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph $\sim n^2$).
-Ideally, to ensure that each clone spin's ground state is the same as it's parent we would have $J_{ij} << J_{clone} \forall i,j$.  Because of physical limits of the machine (especially the resolution mentioned above) large values of $J_{clone}$ may not maximize fidelity: for a machine with finite resolution, having a large $J_{clone}$ may compress other coupling values together such that the ground state starts to overlap with higher energy state.  On the other hand a too small value of $J_{clone}$ may result in ground states in which the clones are not aligned, which will almost certainly also produce incorrect ground states. Thus we have to find an empirical value of $J_{clone}$ that maximizes the fidelity while preserving the ground states.
+\section{Creating Problem Hamiltonians}
+Embedding is the name we give to the general process of translating a computational problem into something which is ready for an adiabatic quantum computer to evaluate.  As mention in Section \ref{sec:prob_ham}, the first step is to generate a problem Hamiltonian.  We employ two methods for finding suitable problem Hamiltonians.  The first, using linear programming, is suitable for small Hamiltonians (generally only a few variables in size).  The second is to use the software \texttt{QCC} which takes advantage of the gluing theorem to stitch together a problem Hamiltonian out of smaller sub-Hamiltonians.
+The next step in the embedding process is to translate our problem Hamiltonians, which generally may have arbitrary topologies, coupling values, number of variables etc. into Hamiltonians which an adiabatic quantum computer is capable of physically implementing.
+
+\subsection{Linear Programming}
+The requirements we have for a problem Hamiltonian can be described using a system of constraints, and solved using the techniques of linear programming (LP).
+Briefly, LP is a method to optimize some objective function subject to linear equality and linear inequality constraints i.e. constraints of the form $ax + by < c$ (thus the name \emph{linear} programming).  There are many software packages that implement LP solving, both Free Software and proprietary.  This makes it an easily usable technique.
+
+The way in which we use LP to create a problem Hamiltonian is to set our objective function to the sum of the value of the couplings in the Hamiltonian; for a complete graph we have $N = \frac{1}{2}n(n-1) + n$ fields and couplings, so our objective function will be of the form $\sum_{i=0}^N x_i$ where each $x_i$ is the value of either a field or coupling.
+
+We then create a constraint for each possible state of the system; for states which satisfy the logic we wish to encode, we add a constraint such that 
+
+\begin{equation}
+	\sum_i^n s_i x_i + \sum_{i=n,j > i}^N s_i s_j x_i + K = 0
+	\label{eq:LP}
+\end{equation} 
+
+where $s_i$ is the value of spin $i$ ($\pm 1$) in the state we are encoding and $K$ is a constant which will take on the value of the ground state energy.  The first sum in the constraint adds the energy contributions from the fields, while the second sum adds the energy contributions from the couplings.
+For each state which does NOT satisfy the logic that we wish to encode, we add a constraint of the same form as Equation \ref{eq:LP} except that the total sum must be \emph{greater} than zero rather than equal to zero.
+
+The combined effect of all of these constraints is that when we solve the system for the set of variables $x_i$ which minimize the objective function, states which encode the desired logic will have an energy of $-K$ and states which do not encode the desired logic will have an energy greater than $-K$.
+This is a slightly unusual use for LP; normally the finding the set of $x_i$'s that optimize the objective function is the goal, but for us finding the $x_i$'s which satisfy the constraints if the central objective.
+Minimizing the sum of the coupling values simply helps to keep the number of different coupling values small and the spread between them down.  This will be important because physical adiabatic quantum computers can only implement a finite number of different coupling values in finite ranges. 
+
+Unfortunately while this method allows us to find a set of couplings to encode the logic of any circuit, we require a constraint for each possible state of each of the variables.  For a binary circuit with $n$ variables, this is $2^n$ states.
+The above process for creating problem Hamiltonians is thus clearly NP-Hard, and becomes extremely computationally inefficient for larger circuit sizes.
+That said, this method retains utility for finding small sub-Hamiltonians to use as building blocks for larger problem Hamiltonians using \texttt{QCC} as described in the next section.
+
+\subsection{\texttt{QCC}}
 
 \section{Embedding algorithm}
+Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same structure as the Chimera graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
+Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  
+We expect that translating complete graphs onto graphs with constant neighbour counts to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph $\sim n^2$).
+Ideally, to ensure that each clone spin's ground state is the same as it's parent we would have $J_{ij} << J_{clone} \forall i,j$.  Because of physical limits of the machine (especially the resolution mentioned above) large values of $J_{clone}$ may not maximize fidelity: for a machine with finite resolution, having a large $J_{clone}$ may compress other coupling values together such that the ground state starts to overlap with higher energy state.  On the other hand a too small value of $J_{clone}$ may result in ground states in which the clones are not aligned, which will almost certainly also produce incorrect ground states. Thus we have to find an empirical value of $J_{clone}$ that maximizes the fidelity while preserving the ground states.
 
 The embedding algorithm is as follows:
 
