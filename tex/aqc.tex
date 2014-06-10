@@ -17,6 +17,7 @@ where $E_i$ and $E_f$ are the energies of the initial and final states, $\hat{V}
 So if the speed at which the Hamiltonian changes (the derivative term) is slow enough, and the gap between the initial state and the other states ($E_f - E_i$) is large enough, then the system won't transition into a new state.  
 
 \section{Finding a Problem Hamiltonian}
+\label{sec:prob_ham}
 While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
 
 \begin{displaymath}
@@ -37,7 +38,9 @@ Figure \ref{fig:nand_graph} shows a Hamiltonian graph describing the $h_i$'s and
 \end{figure}
 
 
-We don't expect this encoding using NANDs glued together to be either optimal in the sense of using fewest spins or couplings, or to be asymptotically faster than an equivalent classical circuit.  We have no general solution for the first problem; each computational problem we want to encode efficiently requires it's own bespoke encoding.  To solve the second problem we take advantage of the fact that quantum mechanics is time-reversible: which variables are output and which are input is arbitrary.  Thus if we have a solution in mind for a given problem we can simply encode the Hamiltonian ``backwards'' and recover answers that would lead to our initial solution.  For NP problems, where verifying a solution is in P, we can thus write a verification circuit with a solution of \texttt{true} and find the inputs to our NP problem.
+We don't expect this encoding using NANDs glued together to be either optimal in the sense of using fewest spins or couplings, or to be asymptotically faster than an equivalent classical circuit.  We have no general solution for the first problem; each computational problem we want to encode efficiently requires it's own bespoke encoding.  
+To solve the second problem we take advantage of the fact that quantum mechanics is time-reversible: which variables are output and which are input is arbitrary.  
+Thus if we have a solution in mind for a given problem we can simply encode the Hamiltonian ``backwards'' and recover answers that would lead to our initial solution.  For NP problems, where verifying a solution is in P, we can thus write a verification circuit with a solution of \texttt{true} and find the inputs to our NP problem.
 It seems reasonable that a circuit for multiplication will be evaluable in polynomial time; because factoring can be solved with the same circuit, it is not inconceivable that a factoring circuit could be evaluable in polynomial time as well.
 
 Our approach to solving NP problems is thus:
@@ -52,7 +55,7 @@ Once we have a Hamiltonian whose ground state encodes the problem we would like 
 \begin{displaymath}
 	H_i = \sum_i^N B \sigma_i^x
 \end{displaymath}
-which has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm Z}$).  This is easy to prepare by applying a large magnetic field along the negative x direction.
+where $B$ is some large constant.  This Hamiltonian has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm z}$).  This is easy to prepare by applying a large magnetic field along the negative x direction.
 Once we've assembled both our initial and final Hamiltonians, we can conduct the evolution.  We call the total Hamiltonian $H_{tot}$, and it is simply the sum of the initial and final Hamiltonian:
 
 \begin{displaymath}
