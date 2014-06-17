@@ -28,8 +28,11 @@ The above process for creating problem Hamiltonians is thus clearly NP-Hard, and
 That said, this method retains utility for finding small sub-Hamiltonians to use as building blocks for larger problem Hamiltonians using \texttt{QCC} as described in the next section.
 
 \subsection{\texttt{QCC}}
+\texttt{QCC} is a collection of programs and libraries designed to produce problem Hamiltonians.  The core of \texttt{QCC} are two pieces: the \texttt{QSM} language and interpreter, and the embedding algorithm.  The \texttt{QSM} language is a programming language designed to simplify the connecting of sub-Hamiltonians.  It is both human writable and serves as a compilation target for more complicated or high level languages.  One can write a \texttt{QSM} file describing a circuit composed of multiple sub-Hamiltonians, and the \texttt{QSM} interpreter will construct the appropriate problem Hamiltonian, including any auxiliary spins that the sub-Hamiltonians need if any.  Once the problem Hamiltonian has been generated, a Hamiltonian with equivalent ground states that is isomorphic to a sub-graph of a particular hardware implementation must be created in order for the problem Hamiltonian to be solved; this is the job of the embedding algorithm.
 
-\section{Embedding algorithm}
+\subsection{\texttt{QSM} Language}
+
+\subsection{Embedding algorithm}
 Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same structure as the Chimera graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
 Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  
 We expect that translating complete graphs onto graphs with constant neighbour counts to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph $\sim n^2$).
