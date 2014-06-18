@@ -1,11 +1,9 @@
 \chapter{Preliminary Results}
 \label{chap:prelim}
 
-\begin{figure}
-	\scalebox{0.5}{
+\begin{figure}[h]
 	\includegraphics{img/6_018_2_fidelity.eps}
-}
-\caption[Fidelity vs Time]{Plot of the fidelity as a function of annealing time for the Hamiltonian ``6\_018'' for both the full time range and the first 10 time points.  Both windows show the same data set.  Errors are estimated from $\sigma = \sqrt{np(1-p)}$.  Interesting features include the decrease in fidelity with longer anneal time and that the fidelity is very volatile over the short anneal time periods.}
+	\caption[Fidelity vs Time]{Plot of the fidelity as a function of annealing time for the Hamiltonian ``6\_018'' for both the full time range and the first 10 time points.  Both windows show the same data set.  Errors are estimated from $\sigma = \sqrt{np(1-p)}$.  Interesting features include the decrease in fidelity with longer anneal time and that the fidelity is very volatile over the short anneal time periods.}
 	\label{fig:fidelity}
 \end{figure}
 
@@ -17,10 +15,10 @@ Our best estimate of the fidelity from a single run is thus the fraction of succ
 
 Figure \ref{fig:fidelity} shows the results of an initial set of runs spanning annealing times from 20 $\mu$s to 20 ms.  
 There are several features of this data that stand out.  
-First, contrary to our expectations, the fidelity \emph{decreases} as the anneal time increases.  We would expect that longer anneal times bring us closer to adiabatic evolution and thus remaining in the ground state.  This result suggests to us that adiabaticity (or lack thereof) is not dominating the errors.  
-Second, there is significant change in the fidelity over very small changes in anneal time for less than $\sim 300$ $\mu$s, well outside what we would statistically expect based on the number of reads conducted.  This suggests that the \texttt{VESUVIUS} machine cannot be naively treated as an adiabatic quantum system.
+First, contrary to our expectations, the fidelity \emph{decreases} as the anneal time increases.  We would expect that longer anneal times bring us closer to adiabatic evolution and thus remaining in the ground state.  This result suggests to us that adiabaticity (or lack thereof) is not dominating the fidelity for long annealing times. 
+Second, there is significant change in the fidelity over very small changes in anneal time for less than $\sim 300$ $\mu$s, well outside what we would statistically expect based on the number of reads conducted.  This suggests that there is an uncontrolled factor besides the annealing time when the anneal time is short.  This factor disappears for longer anneal times, when whatever is damping the fidelity also seems to dampen the short time oscillations.
 
-The two main questions this work seeks to address are thus: \emph{Why does the fidelity vary so greatly for short anneal times, and why does the fidelity decrease for longer anneal times?}
+Figure \ref{fig:short_fidelity} shows the same data as in Figure \ref{fig:fidelity} as well as three more sweeps conducted in the same fashion, annealing out to 500 $\mu$s.  The large-short time oscillations are still seen, and of note is the fact that different runs of the same anneal time lie far outside their respective error margins.  This confirms our earlier suspicion that rather than the quantum annealing fidelity actually changing so rapidly with small changes in anneal time, there is some other uncontrolled factor which is changing from run to run.
 
 \begin{figure}
 	\scalebox{0.35}{
@@ -30,38 +28,5 @@ The two main questions this work seeks to address are thus: \emph{Why does the f
 	\label{fig:short_fidelity}
 \end{figure}
 
-\section{Short-time Evolution}
-Figure \ref{fig:short_fidelity} shows the results of four different sets of runs of the Hamiltonian ``6\_018''.  As can be seen, the estimated fidelities lie well apart from each other, and outside their respective estimated errors.  This would seem to indicate that programming errors are a significant factor in the final fidelity: for the same anneal time on the same Hamiltonian, different runs of ``6\_018'' have fidelities ranging from 0.07 to 0.41.
+The Hamiltonian shown in the above figures is large and reasonably complicated, with blocks of clauses and chains of clone spins spread across many qubytes.  Simplifying the Hamiltonian until we see smooth fidelity vs. time curves as we expect, and then increasing the complicating factors until we see the oscillations emerge would let us figure out what's causing them.  To that end a simple Hamiltonian consisting of a single qubyte of spins and encoding the logic of three variables \texttt{AND}ed together with an output of \texttt{true} was evaluated in the same fashion as the earlier ``6\_018'': runs at anneal times from 20 $\mu$s to 500 $\mu$s with 1000 reads per run.  The results are shown in Figure 
 
-
-\section{Long-time Evolution}
-For a purely quantum system the fidelity should increase in the limit of increasing annealing time.  What we see instead in the actual data is that the fidelity appears to approach zero as the annealing time increases.  The physical computer is not an ideal quantum system, so to model it correctly we need to account for noise and decoherence sources.
-
-We should fit this decreasing fidelity, or perhaps the population histogram, to some sort of model of thermal noise.  Then we could determine the energy leakage, maybe.
-
-
-
-
-\begin{figure}
-	\scalebox{0.75}{
-		\includegraphics[bb= 0 0 800 600]{img/4_5_hist.png}
-	}
-	\caption[Short Time Fidelity Histogram]{Histogram of the fidelities found for all annealing times  $< 500 \mu$s.  Notice the gaussian like structure.}
-	\label{fig:fid_hist}
-\end{figure}
-
-\begin{figure}
-	%\scalebox{0.75}{
-	%	\includegraphics[]{}
-	%}
-	\caption[Simulation of Schr\"odinger's Equation]{Numerical integration of Schr\"odinger's Equation for the Hamiltonian ``k44'' showing the fidelity increasing to a plateau as the annealing time increases.}
-	\label{fig:simulated_anneal}
-\end{figure}
-
-\begin{figure}
-	%\scalebox{0.75}{
-	%	\includegraphics{img/k44_comparison.pdf}
-	%}
-	\caption[Long Time Anneal]{Machine data from Hamiltonian ``k44'' with 100 runs of 1000 reads showing the Hamiltonian noise at short times and the fidelity drop at long anneal times.}
-	\label{fig:k44_long}
-\end{figure}
