@@ -21,3 +21,12 @@ The linear spacing of the machine implemented couplings implies that Hamiltonian
 \label{sec:noise}
 The resolution issue is exacerbated by the fact that there is some error in the programming of each coupling (or field).  The magnitude of this error is uncertain; efforts are underway to quantify how much error is consistent with results from the machine \cite{aaron}.
 The preliminary results in Chapter \ref{chap:prelim} suggest that the programming noise is in the neighbourhood of the machine coupling spacing, i.e. 1/7 of $g(t)$.
+
+\section{Inoperable Qubits}
+Not every qubit on the \texttt{VESUVIUS} machine is functional all of the time.  As the machine is cooled to super-conducting temperatures, lines of magnetic flux can become trapped inside.  As some parts cool past the critical temperature before others, the Meissner effect forces magnetic flux out of the super-conducting regions into the regions which are still above the critical temperature.  If the regions of trapped flux are surrounded by super-conducting regions, there is no way for the trapped flux to escape and so it remains inside the machine, hindering the operation of whichever qubits it intersects.  As in the normal course of operation the machine is brought above super-conducting temperatures only for maintenance, the pattern of broken qubits can remain stable for long periods of time.  Figure \ref{fig:broken_qubits} shows the layout of the \texttt{VESUVIUS} machine, with the qubits that were inoperable for the duration of this study marked in red.
+
+\begin{figure}
+\includegraphics[bb= 0 0 4.25in 5.5in]{img/chimeraFig.pdf}
+\caption[\texttt{VESUVIUS} Layout]{Diagram of the connectivity of the \texttt{VESUVIUS} machine showing the Chimera graph structure, with the qubits which were inoperable during the duration of this study marked in red.}
+\label{fig:broken_qubits}
+\end{figure}
