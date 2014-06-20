@@ -1,9 +1,11 @@
 \chapter{Embedding}
 \section{Creating Problem Hamiltonians}
 Embedding is the name we give to the general process of translating a computational problem into something which is ready for an adiabatic quantum computer to evaluate.  As mention in Section \ref{sec:prob_ham}, the first step is to generate a problem Hamiltonian.  We employ two methods for finding suitable problem Hamiltonians.  The first, using linear programming, is suitable for small Hamiltonians (generally only a few variables in size).  The second is to use the software \texttt{QCC} which takes advantage of the gluing theorem to stitch together a problem Hamiltonian out of smaller sub-Hamiltonians.
-The next step in the embedding process is to translate our problem Hamiltonians, which generally may have arbitrary topologies, coupling values, number of variables etc. into Hamiltonians which an adiabatic quantum computer is capable of physically implementing.
+The second step in the embedding process is to translate our problem Hamiltonians, which generally may have arbitrary topologies, coupling values, number of variables etc. into Hamiltonians which an adiabatic quantum computer is capable of physically implementing.
 
-\subsection{Linear Programming}
+This is not the only method of generating problem Hamiltonians.  The programmatic style described above seems natural for solving actual computational problems, but e.g. if one wanted to go a more academic computer science route one could reduce one's problems to known NP-Complete problems and evaluate those.  Lucas \cite{lucas} handily provides a compilation of ising formulations of a variety of different NP-Complete suitable for such an approach.
+
+\section{Linear Programming}
 The requirements we have for a problem Hamiltonian can be described using a system of constraints, and solved using the techniques of linear programming (LP).
 Briefly, LP is a method to optimize some objective function subject to linear equality and linear inequality constraints i.e. constraints of the form $ax + by < c$ (thus the name \emph{linear} programming).  There are many software packages that implement LP solving, both Free Software and proprietary.  This makes it an easily usable technique.
 
@@ -27,14 +29,14 @@ Unfortunately while this method allows us to find a set of couplings to encode t
 The above process for creating problem Hamiltonians is thus clearly NP-Hard, and becomes extremely computationally inefficient for larger circuit sizes.
 That said, this method retains utility for finding small sub-Hamiltonians to use as building blocks for larger problem Hamiltonians using \texttt{QCC} as described in the next section.
 
-\subsection{\texttt{QCC}}
+\section{\texttt{QCC}}
 \texttt{QCC} is a collection of programs and libraries designed to produce problem Hamiltonians.  The core of \texttt{QCC} are two pieces: the \texttt{QSM} language and interpreter, and the embedding algorithm.  The \texttt{QSM} language is a programming language designed to simplify the connecting of sub-Hamiltonians.  It is both human writable and serves as a compilation target for more complicated or high level languages.  One can write a \texttt{QSM} file describing a circuit composed of multiple sub-Hamiltonians, and the \texttt{QSM} interpreter will construct the appropriate problem Hamiltonian, including any auxiliary spins that the sub-Hamiltonians need if any.  Once the problem Hamiltonian has been generated, a Hamiltonian with equivalent ground states that is isomorphic to a sub-graph of a particular hardware implementation must be created in order for the problem Hamiltonian to be solved; this is the job of the embedding algorithm.
 
-\subsection{\texttt{QSM} Language}
+\section{\texttt{QSM} Language}
 
-\subsection{Embedding algorithm}
+\section{Embedding algorithm}
 Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same structure as the Chimera graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
-Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  
+Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  The following algorithm is essentially equivalent to one presented in \cite{choi1}.
 We expect that translating complete graphs onto graphs with constant neighbour counts to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph $\sim n^2$).
 Ideally, to ensure that each clone spin's ground state is the same as it's parent we would have $J_{ij} << J_{clone} \forall i,j$.  Because of physical limits of the machine (especially the resolution mentioned above) large values of $J_{clone}$ may not maximize fidelity: for a machine with finite resolution, having a large $J_{clone}$ may compress other coupling values together such that the ground state starts to overlap with higher energy state.  On the other hand a too small value of $J_{clone}$ may result in ground states in which the clones are not aligned, which will almost certainly also produce incorrect ground states. Thus we have to find an empirical value of $J_{clone}$ that maximizes the fidelity while preserving the ground states.
 
@@ -72,4 +74,4 @@ Each term in $V$, both fields and couplings, should now have a corresponding ter
 	\label{fig:embedding}
 \end{figure}
 
-This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the Chimera graph), however, the principle should be easily generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead.
+This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the Chimera graph), however, the principle should be generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead by allocating the input graph spins along the diagonal.

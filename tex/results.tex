@@ -1,1 +1,34 @@
-\chapter{Results}
+\chapter{Results and Discussion}
+\section{Short-time oscillations}
+Looking to expand on the results of Chapter \ref{chap:prelim}, multiple sweeps of data were collected from a Hamiltonian labelled ``k44\_and''.  Figure \ref{fig:results_avg} shows the resulting fidelity estimates as a function of time.  This Hamiltonian not only occupies a single qubyte like ``k44'', but there is only one unique ground state.  These properties were chosen to attempt to minimize complicating factors.  Runs were carried out at annealing times from 20 $\mu$s to 20 ms as before.  Each run consisted of 100 reads, and 35 different runs were conducted at each anneal time.  Each fidelity estimate consists of a weighted average of each of the individual run estimates, weighted by the binomial error $\sigma$ for that run.
+The error estimate at each anneal time is the standard deviation of the distribution of the individual run estimates.
+
+Unlike in Chapter \ref{chap:prelim}, averaging over many runs at the same anneal time has managed to remove the short-time oscillations.  Figure \ref{fig:hist} shows a histogram of fidelities measured for ``k44\_and'' at an anneal time of 20 $\mu$s.  The Gaussian shape suggests that there are two effects going on: first, there is a value of the fidelity determined mainly by the quantum annealing (at the centre of the distribution) and second, that there is some noise applied over the fidelity from run to run.  The most likely source of this seems to be the programming error from imprecision of the physical couplings (see Section \ref{sec:noise}).  If the noise in programming the couplings is high enough that if two adjacent couplings end up close enough together then the fidelity will drop because instead of the state we expect being the ground state and thus the most common, it will actually be some higher energy excited state and thus if the annealing is carried out successfully will have low probability of being found.  In the other scenario where two adjacent couplings are randomly bounced away from each other, it is entirely possible that in addition to the ground state being correctly encoded the gap is larger, thus increasing the fidelity.
+
+\begin{figure}
+	%includegraphics
+	\caption[Averaged Anneal Results]{Fidelity vs anneal time with each data point averaged over multiple different runs.  Each run was used to estimate the fidelity independently as in Chapter \ref{chap:prelim}, with the final estimate the weighted average of each run.  The errorbars reflect the standard deviation of the distribution of estimates from each run.}
+	\label{fig:results_avg}
+\end{figure}
+
+\begin{figure}
+	%includegraphics
+	\caption[Estimated Fidelity Histogram]{Histogram of the estimated fidelities for each run of the Hamiltonian ``k44\_and'' with an anneal time of 20 $\mu$s.  The shape appears roughly Gaussian, indicating that while there is a random factor in the fidelity that varies from run to run, there is still a central value that we take in this case to be roughly FIXME.}
+	\label{fig:hist}
+\end{figure}
+
+\begin{figure}
+	%includegraphics
+	\caption[Fidelity Distribution vs. Time]{This figure shows the breadth of the distribution of estimated fidelities, i.e. the standard deviation $\sigma$ as a function of the annealing time for the Hamiltonian ``k44\_and''.  As the annealing time increases, the short-time oscillation effect observed in the preliminary results dies off and the distribution narrows.}
+	\label{fig:std_time}
+\end{figure}
+
+Figure \ref{fig:std_time} shows the standard deviation of the fidelity estimates from evaluation of ``k44\_and'' as a function of the annealing time.  As we saw in the previous results, the large oscillations observed in the short-time fidelity die away as the annealing time increases.  This quantifies our earlier observation of the short-time oscillations: there are two regimes of the annealing, one below $\sim 500$ $\mu$s where the standard deviation is $\sim$ FIXME and one above $\sim 500$ $\mu$s where the standard deviation quickly drops down to FIXME.
+
+This still does not explain \emph{why} the short-time oscillations do not persist into longer annealing times.  The above argument regarding overlap of the physical couplings applies just as well to annealing at longer times.
+
+\section{Read noise}
+
+\section{Size scaling}
+
+\section{Clone coupling value}

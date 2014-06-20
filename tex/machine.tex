@@ -17,16 +17,23 @@ First  all the field and coupling values are normalized into the range $[-1..1]$
 Unfortunately we don't know exactly how the coercion is done; it seems reasonable that each normalized coupling would be rounded to the nearest machine implemented coupling, but other schemes such as rounding toward or away from zero are possible.
 The linear spacing of the machine implemented couplings implies that Hamiltonians with couplings that linearly fill the range from $-C_{max}$ to $C_{max}$ will be least affected by the coercing issue, while those Hamiltonians which have gaps between coupling values or other spacings will be most impacted by the effects of finite machine resolution.
 
+\begin{figure}
+	%\includegraphics
+	\caption[Ideal vs. Physical Couplings]{This figure illustrates the difference between ideal and physically implemented couplings; the $\delta$-function like peaks are what ideal couplings would behave as, and the Gaussians what a real machine must implement.  The amount of overlap between the tails of the real couplings is dependent on the magnitude of the programming noise in the machine; the actual amount of overlap present in the \texttt{VESUVIUS} machine is unknown.}
+	\label{fig:coupling_spread}
+\end{figure}
+
 \section{Programming Noise}
 \label{sec:noise}
-The resolution issue is exacerbated by the fact that there is some error in the programming of each coupling (or field).  The magnitude of this error is uncertain; efforts are underway to quantify how much error is consistent with results from the machine \cite{aaron}.
-The preliminary results in Chapter \ref{chap:prelim} suggest that the programming noise is in the neighbourhood of the machine coupling spacing, i.e. 1/7 of $g(t)$.
+The resolution issue is exacerbated by the fact that there is some error in the programming of each coupling (or field).  Ideally one could imagine the physical coupling values implemented by the machine as a series of $\delta$-functions from $-C_{max}$ to $C_{max}$; however, because the couplings are non-ideal, the actual structure of the couplings looks more like Figure \ref{fig:coupling_spread}.  The magnitude of this error is uncertain; efforts are underway to quantify how much error is consistent with results from the machine \cite{aaron}.  If the overlap between adjacent programmable coupling values is large enough, then the Hamiltonian which is actually implemented during a particular run may have a different ground state then what we wished to program in; the larger the overlap, the more likely to get incorrect ground states.  The preliminary results in Chapter \ref{chap:prelim} suggest that the programming noise is in the neighbourhood of the machine coupling spacing, or large enough that it is possible for the programming noise to cause incorrect ground states.
 
 \section{Inoperable Qubits}
 Not every qubit on the \texttt{VESUVIUS} machine is functional all of the time.  As the machine is cooled to super-conducting temperatures, lines of magnetic flux can become trapped inside.  As some parts cool past the critical temperature before others, the Meissner effect forces magnetic flux out of the super-conducting regions into the regions which are still above the critical temperature.  If the regions of trapped flux are surrounded by super-conducting regions, there is no way for the trapped flux to escape and so it remains inside the machine, hindering the operation of whichever qubits it intersects.  As in the normal course of operation the machine is brought above super-conducting temperatures only for maintenance, the pattern of broken qubits can remain stable for long periods of time.  Figure \ref{fig:broken_qubits} shows the layout of the \texttt{VESUVIUS} machine, with the qubits that were inoperable for the duration of this study marked in red.
 
 \begin{figure}
-\includegraphics[bb= 0 0 4.25in 5.5in]{img/chimeraFig.pdf}
-\caption[\texttt{VESUVIUS} Layout]{Diagram of the connectivity of the \texttt{VESUVIUS} machine showing the Chimera graph structure, with the qubits which were inoperable during the duration of this study marked in red.}
-\label{fig:broken_qubits}
+	\scalebox{0.80}{
+		\includegraphics[bb= 0 0 8.5in 11in]{img/chimeraFig.pdf}
+	}
+	\caption[\texttt{VESUVIUS} Layout]{Diagram of the connectivity of the \texttt{VESUVIUS} machine showing the Chimera graph structure, with the qubits which were inoperable during the duration of this study marked in red.}
+	\label{fig:broken_qubits}
 \end{figure}
