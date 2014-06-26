@@ -35,6 +35,7 @@ That said, this method retains utility for finding small sub-Hamiltonians to use
 \section{\texttt{QSM} Language}
 
 \section{Embedding algorithm}
+\label{sec:embed_algo}
 Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same structure as the Chimera graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
 Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  The following algorithm is essentially equivalent to one presented in \cite{choi1}.
 We expect that translating complete graphs onto graphs with constant neighbour counts to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph $\sim n^2$).
