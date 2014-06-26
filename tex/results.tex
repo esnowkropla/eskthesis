@@ -1,4 +1,27 @@
 \chapter{Results and Discussion}
+\begin{figure}
+	\scalebox{0.4}{
+		\includegraphics[bb= 0 0 1341 868]{img/4th_run_avg_low.png}
+	}
+	\caption[Running Fidelity Average]{Running average of the fidelity of the Hamiltonian ``6\_018'' for several short-time anneals, showing the change in fidelity with increasing read number.  The number of reads averaged over increases from zero to one thousand.  The rightmost edge of each data set shows the final fidelity estimate for that anneal time.  }
+	\label{fig:running_avg}
+\end{figure}
+\section{Read noise}
+First we examine the question of whether there is significant drift in the fidelity within a single run.  That is, does the probability of getting the ground state on any given read depend on the read number (the first read, second read etc.).  This question was examined on the Hamiltonian ``6\_018'' because the data collected on that particular Hamiltonian always consisted of at least 1000 reads per run.
+Figure \ref{fig:running_avg} shows the running average of some short-time anneals from a single sweep of ``6\_018''.  If there is not significant read noise, we expect that the running average should flatten out and converge on the ``true'' fidelity after the appropriate number of reads.  For example, for a standard deviation $\sigma = \sqrt{np(1-p)}$ we expect that the running average should be within 5\% of the true fidelity after $\sim$ 200 reads.  Most of the anneal times appear to be reasonably flat past $\sim$ 500 reads, so the running averages appear to indicate to us that there isn't significant read noise (or at least, not nearly enough to be responsible for the short-time oscillations we saw in Chapter \ref{chap:prelim}).
+
+The running average is a somewhat flawed quantity however, since it privileges earlier reads over later ones (since each read contributes like $1/N$ for $N$ reads already counted).  To remedy this we can also look at a rolling average of the fidelity as the reads come in.  Figure \ref{fig:rolling_avg} shows a rolling average of the fidelity for the same data as Figure \ref{fig:running_avg}.  Each point is the ground state fraction of the 100 reads around the labelled point; e.g. the value at point 500 is the number of ground states found from reads 450 to 550 over 100.  The rolling average has an advantage over the running average in that it does not prefer any part of the data set, but it can be harder to make out trends than in the running average.  It can be seen in the rolling average data that there does not appear to be a trend toward the fidelity being higher or lower in different segments of the run; e.g. the 22 $\mu$s run has highest fidelity in the nieghbourhood of read 600, while the 25 $\mu$s run has a minimum in the same location.
+
+The combined results of the running and rolling averages would seem to indicate that intra-run errors, or errors occurring in the process of administering different reads, are not a significant contributor to the final observed fidelity for any given problem.
+
+\begin{figure}
+	\scalebox{0.35}{
+		\includegraphics[bb=0 0 1582 917]{img/4th_run_roll_avg_low_100.png}
+	}
+	\caption[Rolling Fidelity Average]{Rolling average of the estimated fidelity for data collected from Hamiltonian ``6\_018'' at the seven shortest anneal times.  Each point is the average fidelity over a one hundred point window, e.g. the value at point 500 is the total number of times the ground state was measured between reads 450 and 550 divided by one hundred.}
+	\label{fig:rolling_avg}
+\end{figure}
+
 \section{Short-time oscillations}
 Looking to expand on the results of Chapter \ref{chap:prelim}, multiple sweeps of data were collected from a Hamiltonian labelled ``k44\_and''.  Figure \ref{fig:results_avg} shows the resulting fidelity estimates as a function of time.  This Hamiltonian not only occupies a single qubyte like ``k44'', but there is only one unique ground state.  These properties were chosen to attempt to minimize complicating factors.  Runs were carried out at annealing times from 20 $\mu$s to 20 ms as before.  Each run consisted of 100 reads, and 35 different runs were conducted at each anneal time.  Each fidelity estimate consists of a weighted average of each of the individual run estimates, weighted by the binomial error $\sigma$ for that run.
 The error estimate at each anneal time is the standard deviation of the distribution of the individual run estimates.
@@ -27,7 +50,6 @@ Figure \ref{fig:std_time} shows the standard deviation of the fidelity estimates
 
 This still does not explain \emph{why} the short-time oscillations do not persist into longer annealing times.  The above argument regarding overlap of the physical couplings applies just as well to annealing at longer times.
 
-\section{Read noise}
 
 \section{Size scaling}
 

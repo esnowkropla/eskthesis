@@ -1,15 +1,31 @@
 \chapter{The \texttt{VESUVIUS} Machine}
 \label{chap:machine}
+\section{Machine Description}
+The \texttt{VESUVIUS} machine on which our experiments were conducted is composed of 512 rf-SQUID superconducting qubits of the type described in \cite{qubit} \cite{dwave_nature}. It is the same physical machine as the larger of the two machines described in \cite{pudenz}.
+
+Each qubit consists of a Josephson junction, with left and right circulating currents serving the roles of up/down or 1/0.  Figure \ref{fig:josephson} shows both a diagram of a qubit and a corresponding coupler, and also the energy structure of the Josephson junction.  Each well of the double well potential corresponds to one of left or right circulating current.  This can be modelled as a two-level system, despite the fact that there are multiple other energy levels both in the wells and above them in the 
+
+\begin{figure}
+	\caption[Josephson Junction and Energy Diagram]{Inset a) shows the structure of a single qubit Josephson Junction along with an inductive coupler.  Inset b) shows the energy structure for one of these qubits; each of the double wells is a computational basis state.  Figure taken from \cite{qubit}}
+	\label{fig:josephson}
+\end{figure}
 
 \section{Annealing Schedule}
-The \texttt{VESUVIUS} machine on which our experiments were conducted is composed of 512 rf-SQUID superconducting qubits of the type described in \cite{qubit} \cite{dwave_nature}. It is the same phsyical machine as the larger of the two machines described in \cite{pudenz}.
-As mentioned in Chapter \ref{chap:aqc} the form of the Hamiltonian we use for AQC is
+As previously stated in Chapter \ref{chap:aqc} the form of the Hamiltonian we use for AQC is
 
 \begin{displaymath}
 	H_{tot} = f(t)H_i + g(t)H_f
 \end{displaymath}
 
-and the experiments were carried out with a transverse field of $f(0) \approx 33.8 $ GHz and a maximum normalized coupling value of $g(T) \approx 20.5$ GHz, and an annealing temperature of 17 mK.  These correspond to energies of $140 \mu$ eV and $85 \mu$ eV for the Hamiltonian components respectively and a thermal energy of $1.5 \mu$ eV.
+and in our case the experiments were carried out with a transverse field of $f(0) \approx 33.8 $ GHz and a maximum normalized coupling value of $g(T) \approx 20.5$ GHz, and an annealing temperature of 17 mK.  These correspond to energies of $140 \mu$ eV and $85 \mu$ eV for the Hamiltonian components respectively and a thermal energy of $1.5 \mu$ eV.  The particular values of $f$ and $g$ as a function of time are shown in Figure \ref{fig:trajectory}.
+
+\begin{figure}
+	%\scalebox{}{
+	%	\includegraphics[]{}
+	%}
+	\caption[\texttt{VESUVIUS Evolution Trajectory}]{Plot of the two control parameters $f$ and $g$ for the \texttt{VESUVIUS} machine as a function of the annealing time.}
+	\label{fig:trajectory}
+\end{figure}
 
 \section{Resolution}
 In addition to the graph-shape restrictions, the \texttt{VESUVIUS} machine cannot implement arbitrary physical Hamiltonians.  The machine can only implement fields and couplings as one of 15 distinct values: $-7/7, -6/7 \dots 5/7,6/7, 7/7$.  Call the largest coupling present in the problem Hamiltonian $C_{max}$, and the smallest \emph{magnitude} coupling $C_{min}$.  As our embedded Hamiltonians don't generally have a $C_{max}$ to $C_{min}$ distance of exactly 7, they must be manipulated to fit in this range.
@@ -29,6 +45,8 @@ The resolution issue is exacerbated by the fact that there is some error in the 
 
 \section{Inoperable Qubits}
 Not every qubit on the \texttt{VESUVIUS} machine is functional all of the time.  As the machine is cooled to super-conducting temperatures, lines of magnetic flux can become trapped inside.  As some parts cool past the critical temperature before others, the Meissner effect forces magnetic flux out of the super-conducting regions into the regions which are still above the critical temperature.  If the regions of trapped flux are surrounded by super-conducting regions, there is no way for the trapped flux to escape and so it remains inside the machine, hindering the operation of whichever qubits it intersects.  As in the normal course of operation the machine is brought above super-conducting temperatures only for maintenance, the pattern of broken qubits can remain stable for long periods of time.  Figure \ref{fig:broken_qubits} shows the layout of the \texttt{VESUVIUS} machine, with the qubits that were inoperable for the duration of this study marked in red.
+
+The presence of such inoperable qubits lowers the size of the Hamiltonians we can embed more than is at first obvious.  Even though the number of inoperable qubits is fairly small, the embedding algorithm requires many qubits to embed the connections in a fully connected graph.  As a result, in the case where there are 9 disabled qubits the largest embeddable complete graph shrinks from 32 spins to 29, a 10\% decrease in size for losing only 2\% of the spins.  This demonstrates how reliant on connectivity the embedding process is.
 
 \begin{figure}
 	\scalebox{0.80}{
