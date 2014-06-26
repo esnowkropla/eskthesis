@@ -1,6 +1,7 @@
 \chapter{Preliminary Results}
 \label{chap:prelim}
 
+\section{SAT-like Hamiltonian}
 \begin{figure}[h]
 	\includegraphics{img/6_018_2_fidelity.eps}
 	\caption[Fidelity vs Time]{Plot of the fidelity as a function of annealing time for the Hamiltonian ``6\_018'' for both the full time range and the first 10 time points.  Both windows show the same data set.  Errors are estimated from $\sigma = \sqrt{np(1-p)}$.  Interesting features include the decrease in fidelity with longer anneal time and that the fidelity is very volatile over the short anneal time periods.}
@@ -28,6 +29,7 @@ Figure \ref{fig:short_fidelity} shows the same data as in Figure \ref{fig:fideli
 	\label{fig:short_fidelity}
 \end{figure}
 
+\section{Single Qubyte Hamiltonian}
 The Hamiltonian shown in the above figures is large and reasonably complicated, with blocks of clauses and chains of clone spins spread across many qubytes.  Simplifying the Hamiltonian until we see smooth fidelity vs. time curves as we expect, and then increasing the complicating factors until we see the oscillations emerge would let us figure out what's causing them.  To that end a simple Hamiltonian consisting of a single qubyte of spins and encoding the logic of a single SAT clause was evaluated in the same fashion as the earlier ``6\_018'': runs at anneal times from 20 $\mu$s to 500 $\mu$s with 1000 reads per run.  
 
 Figure \ref{fig:k44_comparison} shows the results of two such sweeps.  While the fidelity is higher than in the larger Hamiltonian's case, the short-time oscillations are still present.  The fidelity increase is in line with our expectations; as the number of spins grows the gap shrinks and fidelity drops for a given anneal time.  The continued presence of the short-time oscillations indicates that they're not simply a result of ``difficulty'' of the Hamiltonian (i.e. the gap or the problem size), but some other factor.
@@ -40,3 +42,5 @@ The main goal of the rest of this work is to see if we can create an embedding s
 	\caption[Single K44 Fidelity]{Fidelity as a function of anneal time for the Hamiltonian ``k44'' which consists of a single SAT clause embedded into a single qubyte.  The fidelity is higher than ``6\_018'' for the same anneal times, but the short-time oscillations are still present.}
 	\label{fig:k44_comparison}
 \end{figure}
+
+\section{Boolean SAT Hamiltonian}
