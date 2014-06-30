@@ -1,6 +1,29 @@
 \chapter{Boolean Satisfiability}
 \section{Satisfiability Problems}
-Boolean satisfiability is a family of problems describing the evaluation of boolean \emph{formulae} and \emph{assignments}.  A boolean formula is something of the form 
+Boolean satisfiability is the problem of determining if there exists an assignment of boolean variables to satisfy a given boolean formula.  A boolean formula is \emph{satisfiable} if there is some assignment of the variables within it that causes the whole expression to evaluate to \texttt{true}, and is \emph{unsatisfiable} if there is no such assignment.  
+A boolean expression in conjunctive normal form consists of the conjunction of a set of clauses, each clause consisting of the disjunction of some number of variables (or their negations).  When each clause has $k$ variables, then the problem of finding a satisfying assignment is called $k$-SAT.  An example 3-SAT expression might look like the following
+
 \begin{equation}
-	(x_1 \text{OR} \neg x_2) \text{AND} (\neg x_1 \text{OR} x_3)
+	(x_1 \vee x_2 \vee \neg x_3) \wedge (\neg x_1 \vee \neg x_2 \vee \neg x_3) \wedge (x_1 \vee \neg x_2 \vee x_3)
 \end{equation}
+
+which has five satisfying assignments:
+
+\begin{center}
+\begin{tabular}{l || l | l | l | l | l}
+	\multicolumn{1}{l}{} & \multicolumn{5}{c}{Assignments} \\
+	$x_1$ & \texttt{T} & \texttt{T} & \texttt{T} & \texttt{F} & \texttt{F} \\
+	$x_2$ & \texttt{F} & \texttt{F} & \texttt{T} & \texttt{T} & \texttt{F} \\
+	$x_3$ & \texttt{F} & \texttt{T} & \texttt{F} & \texttt{T} & \texttt{F} \\
+\end{tabular}
+\end{center}
+
+$k$-SAT is NP-Complete\cite{sat} for $k > 2$, and is interesting because it was the first and is one of the most general NP-Complete problems; it is generally very easy to find reductions from other problems into boolean satisfiability.  For this reason we use boolean satisfiability (specifically 3-SAT) for the testing of the \texttt{VESUVIUS} machine.
+
+\section{Randomly Generating 3-SAT Problems}
+We can build 3-SAT instances with $N$ variables and $M$ clauses by randomly selecting three elements from the set of $N$ variables and their negations $M$ times.  Care must be taken when choosing $N$ and $M$ however; while 3-SAT is NP-Complete in general, the difficulty of any particular instance depends strongly on the ratio $\alpha = M/N$\cite{Kirkpatrick}.  In the small $\alpha$ regime there are many satisfying assignments, and any algorithm to find a solution will likely stumble on one by chance.  Contrariwise, in the large $\alpha$ regime, there are likely to be \emph{no} satisfying assignments.
+
+As discussed in Kirkpatrick and Selman\cite{Kirkpatrick}, there is a phase transition between the many solution and zero solution regimes, which occurs around the value of $\alpha$ for which there is likely to be one solution.  This is the region where finding a satisfying assignment (or proving there is none) is the hardest, and helps to keep us from falsely believing our algorithm is better than it is due to too easy SATs.  This transition is sharper for larger values of $N$ or $M$, and broader for smaller values.  As the value of $N$ and $M$ that will fit onto the \texttt{VESUVIUS} machine are very small, we don't expect to see a very sharp difference for different values of $\alpha$.  Kirkpatrick and Selman report that for 3-SAT, the transition occurs at $\alpha \sim 4.17$.  Therefore we shall attempt to generate SATS which lie as close to this transition as possible; in practice, because $N$ and $M$ must be integers, $\alpha$ will be $4.25$ in most of our Hamiltonians.
+
+\section{Embedding 3-SAT}
+Embedding 3-SAT problems requires two different uses for the computational spins: each logical variable requires a computational spin, and each clause also requires a computational spin.  This is because we embed each clause as 
