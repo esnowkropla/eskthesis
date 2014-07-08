@@ -3,14 +3,14 @@
 
 \section{The Adiabatic Theorem}
 
-The central idea of Adiabatic Quantum Computation (AQC) is solving problems by finding the ground states of specially constructed Hamiltonians.  Ground state relaxation is a form of analog computing where we rely on physics to do the calculating for us: we set up a physical system so that the ground state is the solution to our problem and let the system evolve.  Generally speaking, we expect that classical or quantum systems will still take exponentially long to reach this desired ground state for NP-hard problems.\cite{aaronson}
-By starting the system in an easy to prepare state (e.g. ferromagnetically aligned) and then evolving adiabatically into our prepared problem state AQC uses the \emph{adiabatic theorem} to avoid this exponential delay.
+The central idea of Adiabatic Quantum Computation (AQC) is solving problems by finding the ground states of specially constructed Hamiltonians.\cite{farhi}  Ground state relaxation is a form of analog computing where we rely on physics to do the calculating for us: we set up a physical system so that the ground state is the solution to our problem and let the system evolve.  Generally speaking, we expect that classical or quantum systems will still take exponentially long to reach this desired ground state for NP-hard problems.\cite{aaronson}
+By starting the system in an easy to prepare state (e.g. ferromagnetically aligned) and then evolving adiabatically into our prepared problem state AQC uses the \emph{adiabatic theorem} to (hopefully) avoid this exponential delay.
 
 The adiabatic theorem states that if a system is initially prepared in the ith energy level, and the Hamiltonian is evolved according to the adiabatic condition, the system will remain in the ith state after the evolution.  The adiabatic condition is:
 
-\begin{displaymath}
+\begin{equation}
 	\left | \frac{1}{\omega_{fi}}\frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right | << |E_f - E_i|
-\end{displaymath}
+\end{equation}
 
 where $E_i$ and $E_f$ are the energies of the initial and final states, $\hat{V}(t)$ is the time dependant part of the Hamiltonian and $\omega_{if} = \frac{E_f - E_i}{\hbar}$ is a convenient variable.  This (FIXME missing! also maybe put the derivation in an appendix) derivation due to \cite{zettili}.  When the adiabatic condition is satisfied, the probability of transition from state $i$ to state $f$ is zero.
 
@@ -20,9 +20,9 @@ So if the speed at which the Hamiltonian changes (the derivative term) is slow e
 \label{sec:prob_ham}
 While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
 
-\begin{displaymath}
+\begin{equation}
 	H_f = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
-\end{displaymath}
+\end{equation}
 where $\sigma_i^Z$ is the z-pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant ``field'' spin.
 
 Our problem of finding a suitable Hamiltonian is now reduced to finding a set of $h$'s and $J_{ij}$'s such that our desired solution is encoded in the ground state.  We do this by breaking our problem down into sub-problems and finding Hamiltonians for these easier sub-problems, and then reassembling these smaller Hamiltonians into the final problem Hamiltonian using the gluing theorem.\cite{gluing}
@@ -50,28 +50,25 @@ Our approach to solving NP problems is thus:
 	\item Run the adiabatic computer and read off the ``input'' spins
 \end{itemize}
 
+Clamping is the process whereby we take a Hamiltonian containing variables $s_i$ as well as the variable $c$, and modify the Hamiltonian so that the variable to be clamped ($c$) is no longer present.  The field term on $c$ is multiplied by the value that $c$ is to be clamped to ($v = \pm1$), and the ground state energy is shifted by that value.  Then each coupling which connected $c$ to another variable is removed, and the field on that variable is adjusted by the value of the coupling that was removed multiplied by $v$.  The resulting energy structure is the same as the initial Hamiltonian, but as if there was an infinitely large field on $c$ holding it either up or down.  This procedure can be repeated for more than one spin.
+
 \section{Adiabatic Evolution}
 Once we have a Hamiltonian whose ground state encodes the problem we would like to solve, we need to set up the evolution.  The Adiabatic Theorem lets us transition from the ground state of one Hamiltonian to another, so we need an initial Hamiltonian.  In general almost any Hamiltonian which we know the ground state of will work, and we know that the choice of initial Hamiltonian affects the evolution in ways we can't predict.  For simplicity however, we use the following initial Hamiltonian:
-\begin{displaymath}
+\begin{equation}
 	H_i = \sum_i^N B \sigma_i^x
-\end{displaymath}
+\end{equation}
 where $B$ is some large constant.  This Hamiltonian has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm z}$).  This is easy to prepare by applying a large magnetic field along the negative x direction.
 Once we've assembled both our initial and final Hamiltonians, we can conduct the evolution.  We call the total Hamiltonian $H_{tot}$, and it is simply the sum of the initial and final Hamiltonian:
 
-\begin{displaymath}
+\begin{equation}
 	H_{tot} = f(t)H_i + g(t)H_f
-\end{displaymath}
+\end{equation}
 
-where $f$ and $g$ are dimensionless functions of time such that $f(0) = g(T) = 1$ and $f(T) = g(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $f$ and $g$ describe the \emph{evolution path}.  Combining the evolution path with the speed at which the Hamiltonian is changing (or just the speed), that is $\frac{\partial f}{\partial t}$ and $\frac{\partial g}{\partial t}$, gives us the evolution trajectory.  For a purely quantum mechanical system described by the Hamiltonian $H_{tot}$, the evolution trajectory completely determines the fidelity.
+where $f$ and $g$ are dimensionless functions of time such that $f(0) = g(T) = 1$ and $f(T) = g(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $f$ and $g$ describe the \emph{evolution path}.  Combining the evolution path with the speed at which the Hamiltonian is changing (or just the speed), that is $\frac{\partial f}{\partial t}$ and $\frac{\partial g}{\partial t}$, gives us the evolution trajectory.  
+
+For a purely quantum mechanical system described by the Hamiltonian $H_{tot}$, the evolution trajectory completely determines the fidelity.
 The simplest and most obvious trajectory is $f(t) = 1 - t/T$ and $g(t) = t/T$ at a constant speed, or a straight line path through Hamiltonian space.
 Obviously the gap must go to zero as both $f$ and $g$ approach zero; in the absence of any Hamiltonian all states have equal energy.  Likewise scaling $f$ and $g$ by a uniform factor scales the gap by the same factor.  So if we imagine a heightmap of the gap as a function of $f$ and $g$, there is a minimum at $(f=0,g=0)$ and the gap increases along both axes.  
 There is no particular reason that a straight line from $(1,0)$ to $(0,1)$ should maximize the fidelity; indeed we expect that some more complicated curve through Hamiltonian space, potentially including dynamically changing the evolution speed, will give the best results.
 Unfortunately, the physical \texttt{VESUVIUS} machine has a fixed trajectory, with the path and the evolution speed predetermined.  This trajectory is shown in Figure \ref{fig:trajectory}.
-
-\begin{figure}
-	%\scalebox{}{
-	%	\includegraphics[]{}
-	%}
-	\caption[\texttt{VESUVIUS Evolution Trajectory}]{Plot of the two control parameters $f$ and $g$ for the \texttt{VESUVIUS} machine as a function of the annealing time.}
-	\label{fig:trajectory}
-\end{figure}
+This means that any results we measure are not only specific to machines of the specific type employed by D-Wave, but that even future models of theirs might have very different characteristics.  This is especially true a hypothetical future model that would allow changing the annealing schedule to suit the problem, or even better dynamically changing the annealing schedule on the fly.

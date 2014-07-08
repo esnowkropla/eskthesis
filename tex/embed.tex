@@ -3,7 +3,7 @@
 Embedding is the name we give to the general process of translating a computational problem into something which is ready for an adiabatic quantum computer to evaluate.  As mention in Section \ref{sec:prob_ham}, the first step is to generate a problem Hamiltonian.  We employ two methods for finding suitable problem Hamiltonians.  The first, using linear programming, is suitable for small Hamiltonians (generally only a few variables in size).  The second is to use the software \texttt{QCC} which takes advantage of the gluing theorem to stitch together a problem Hamiltonian out of smaller sub-Hamiltonians.
 The second step in the embedding process is to translate our problem Hamiltonians, which generally may have arbitrary topologies, coupling values, number of variables etc. into Hamiltonians which an adiabatic quantum computer is capable of physically implementing.
 
-This is not the only method of generating problem Hamiltonians.  The programmatic style described above seems natural for solving actual computational problems, but e.g. if one wanted to go a more academic computer science route one could reduce one's problems to known NP-Complete problems and evaluate those.  Lucas \cite{lucas} handily provides a compilation of ising formulations of a variety of different NP-Complete suitable for such an approach.
+These are not the only methods of generating problem Hamiltonians.  The programmatic style described above seems natural for solving actual computational problems, but e.g. if one wanted to go a more academic computer science route one could reduce one's problems to known NP-Complete problems and evaluate those.  Lucas \cite{lucas} handily provides a compilation of ising formulations of a variety of different NP-Complete suitable for such an approach.
 
 \section{Linear Programming}
 The requirements we have for a problem Hamiltonian can be described using a system of constraints, and solved using the techniques of linear programming (LP).
@@ -33,8 +33,31 @@ That said, this method retains utility for finding small sub-Hamiltonians to use
 \texttt{QCC} is a collection of programs and libraries designed to produce problem Hamiltonians.  The core of \texttt{QCC} are two pieces: the \texttt{QSM} language and interpreter, and the embedding algorithm.  The \texttt{QSM} language is a programming language designed to simplify the connecting of sub-Hamiltonians.  It is both human writable and serves as a compilation target for more complicated or high level languages.  One can write a \texttt{QSM} file describing a circuit composed of multiple sub-Hamiltonians, and the \texttt{QSM} interpreter will construct the appropriate problem Hamiltonian, including any auxiliary spins that the sub-Hamiltonians need if any.  Once the problem Hamiltonian has been generated, a Hamiltonian with equivalent ground states that is isomorphic to a sub-graph of a particular hardware implementation must be created in order for the problem Hamiltonian to be solved; this is the job of the embedding algorithm.
 
 \section{\texttt{QSM} Language}
+The \texttt{QSM} language is a simple language designed to be readable and writable by both humans and machines.  A \texttt{QSM} file consists of one or more \texttt{QSM} statements; each \texttt{QSM} statement is enclosed by parentheses and consists of a whitespace separated list of the statement components.  If a component has multiple sub-parts then they are also enclosed in parentheses.  There are two kinds of \texttt{QSM} statements, gate statements and clamp statements.
+
+A typical \texttt{QSM} gate statement consists of three components: first the name of the gate or sub-Hamiltonian to be included, then a parenthesis-enclosed list of the input spins for the gate, and third a parenthesis-enclosed list of the output spins for the gate.  An example \texttt{QSM} gate statement is: 
+\begin{center}
+	\texttt{(and (a b) (c))}
+\end{center}
+This \texttt{QSM} statement encodes the logic $A \wedge B = C$.  A variable name may be prefixed by a $\sim$, in which case the logic of that variable is negated.  The other type of \texttt{QSM} statement besides a gate statement is the clamp statement; this statement consists of two components.  First the keyword \texttt{clamp}, followed by a list of variables and the values that they are to be clamped to.  A clamp statement looks like
+\begin{center}
+	\texttt{(clamp ((a +1) (b -1)))}
+\end{center}
+The above clamp statement sets the value of the variables \texttt{a} and \texttt{b} to +1 and -1, respectively.
+
+A complete \texttt{QSM} file might then look like
+
+\begin{center}
+	\texttt{(and (a $\sim$b) (c))}\\
+	\texttt{(or (x y) (b))}\\
+	\texttt{(clamp ((c +1)))}
+\end{center}
+which would compile to a Hamiltonian which encodes the logic $a \wedge \neg b = c, x \vee y = b, c = \text{TRUE}$ and the resulting ground states will be those states for which the logic is satisfied.
+
+The graph representation of the above Hamiltonian if a four vertex graph consisting of a K3 with an extra vertex connected to one of vertices in the K3.  Such a graph is not directly implementable on the \texttt{VESUVIUS} machine, and so before evaluating it we would need to \emph{embed} it.
 
 \section{Embedding algorithm}
+\label{sec:embed_algo}
 Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same structure as the Chimera graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
 Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  The following algorithm is essentially equivalent to one presented in \cite{choi1}.
 We expect that translating complete graphs onto graphs with constant neighbour counts to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph $\sim n^2$).
