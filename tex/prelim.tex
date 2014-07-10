@@ -33,11 +33,26 @@ The Hamiltonian shown in the above figures is large and reasonably complicated, 
 Figure \ref{fig:k44_comparison} shows the results of two such sweeps.  While the fidelity is higher than in the larger Hamiltonian's case, the short-time oscillations are still present.  The fidelity increase is in line with our expectations; as the number of spins grows the gap shrinks and fidelity drops for a given anneal time.  The continued presence of the short-time oscillations indicates that they're not simply a result of ``difficulty'' of the Hamiltonian (i.e. the gap or the problem size), but some other factor.
 
 \begin{figure}
-	\scalebox{0.50}{
-		\includegraphics[bb= 0 0 600 400]{img/k44_comparison.pdf}
-	}
+	\includegraphics{img/k44.eps}
 	\caption[Single K44 Fidelity]{Fidelity as a function of anneal time for the Hamiltonian ``k44'' which consists of a single SAT clause embedded into a single qubyte.  The fidelity is higher than ``6\_018'' for the same anneal times, but the short-time oscillations are still present.}
 	\label{fig:k44_comparison}
 \end{figure}
 
 \section{Boolean SAT Hamiltonian}
+The last preliminary investigation was conducted on a six variable, 21 clause 3-SAT Hamiltonian with two satisfying assignments, FIXME.  When embedded this Hamiltonian filled essentially the entire hardware graph.  Figure \ref{fig:test_6} shows the estimated fidelity from anneal times ranging from 20 $\mu$s to 500 $\mu$s, estimated from 1000 reads and single runs at each anneal time.  The fidelity is close to zero throughout the time range.  In contrast to our previously observed Hamiltonians, the \texttt{VESUVIUS} machine seems unable to successfully solve this particular problem instance.  
+
+Figure \ref{fig:test_6_hist} is a pair of histograms showing all 1000 results of annealing at 20 $\mu$s for both the ``6\_018'' Hamiltonian and the 3-SAT Hamiltonian.  The peak of the distribution for ``6\_018'' is near the ground state, while the peak of the distribution for the 3-SAT Hamiltonian is in the neighbourhood of the 10th excited state.  Presumably this is due to the energy levels of the 3-SAT Hamiltonian closing together where the ``6\_018'' levels do not.  The distribution of the results for the 3-SAT Hamiltonian is also broader, for reasons which are not clear.  Both of these Hamiltonians are much to large to be simulated classically, so we cannot predict how the energy levels change over the annealing to explain the distribution differences directly.
+
+\begin{figure}
+	\includegraphics{img/test_6.eps}
+	\caption[Result of a 6 Variable 3-SAT Instance]{This figure shows the estimated fidelity as a function of annealing time for a six variable, 21 clause 3-SAT instance.  The fidelity is essentially zero throughout the time range.}
+	\label{fig:test_6}
+\end{figure}
+
+\begin{figure}
+	\includegraphics{img/hist.eps}
+	\caption[20 $\mu$s Result State Histograms]{Histograms showing all 1000 states found after 20 $\mu$s of annealing for both ``6\_018'' on the left and the 6 variable 3-SAT on the right.  The fidelity is clearly much higher on the left.  While the distribution of the ``6\_018'' results peaks near the ground state and decays exponentially in a thermodynamic fashion, the 3-SAT results are peaked in the vicinity of the 10th excited state.}
+	\label{fig:test_6_hist}
+\end{figure}
+
+Unfortunately there is not much we can do with such low fidelities, so the rest of the results will focus on simpler Hamiltonians such as ones which occupy single K44s.  This means we cannot benchmark the \texttt{VESUVIUS} machine to any degree since actual 3-SAT problems, even those as small as 6 problem variables, are too difficult for the machine to solve reliably.
