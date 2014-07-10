@@ -30,10 +30,12 @@ Our problem of finding a suitable Hamiltonian is now reduced to finding a set of
 Figure \ref{fig:nand_graph} shows a Hamiltonian graph describing the $h_i$'s and $J_{ij}$'s to encode the logic of a NAND gate.  Because NAND's are universal for computation, combining this graph with the gluing theorem allows us to encode the evaluation of any computable function into the ground state of a Hamiltonian of the general form we described above.  
 
 \begin{figure}
-	%\scalebox{}{
-	%	\includegraphics[]{}
-	%}
-	\caption[\texttt{NAND} Graph]{Graphical representation of the Hamiltonian implementing the logic of a \texttt{NAND} gate.}
+	\begin{center}
+	\scalebox{0.5}{
+		\includegraphics{img/nand.eps}
+	}
+\end{center}
+	\caption[\texttt{NAND} Graph]{Graphical representation of the Hamiltonian implementing the logic of a \texttt{NAND} gate.  Each of the vertices is a spin and the number inside is the field value on that spin; each edge is the coupling value between the respective vertices.  The top two spins are the input spins, while the bottom is the output.  Each ground state of this Hamiltonian enforces the logic $C = \neg(A \wedge B)$.}
 	\label{fig:nand_graph}
 \end{figure}
 
@@ -61,14 +63,22 @@ where $B$ is some large constant.  This Hamiltonian has as it's ground state all
 Once we've assembled both our initial and final Hamiltonians, we can conduct the evolution.  We call the total Hamiltonian $H_{tot}$, and it is simply the sum of the initial and final Hamiltonian:
 
 \begin{equation}
-	H_{tot} = f(t)H_i + g(t)H_f
+	H_{tot} = A(t)H_i + B(t)H_f
 \end{equation}
 
-where $f$ and $g$ are dimensionless functions of time such that $f(0) = g(T) = 1$ and $f(T) = g(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $f$ and $g$ describe the \emph{evolution path}.  Combining the evolution path with the speed at which the Hamiltonian is changing (or just the speed), that is $\frac{\partial f}{\partial t}$ and $\frac{\partial g}{\partial t}$, gives us the evolution trajectory.  
+where $f$ and $g$ are dimensionless functions of time such that $A(0) = B(T) = 1$ and $A(T) = B(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $A$ and $B$ describe the \emph{evolution path}.  Combining the evolution path with the speed at which the Hamiltonian is changing (or just the speed), that is $\frac{\partial A}{\partial t}$ and $\frac{\partial B}{\partial t}$, gives us the evolution trajectory.  
+
+Given a ground state of $H_{tot}$, $\ket{\psi_{gs}}$, the \emph{fidelity} is the probability of measuring $\psi_{gs}$, or $|\braket{\psi_{gs}|H_f|\psi_{gs}}|^2$.  If there are $N$ correct answer to our computation, and thus $\ket{\psi_N}$ degenerate ground states, the fidelity is defined as
+
+\begin{equation}
+	F = \sum_{i=0}^N \braket{\psi_i|H_f|\psi_i}
+\end{equation}
+
+For a perfectly annealed system, the fidelity should go to one as the annealing time increases.  Since any real annealing will not be in the infinite anneal time limit, in practice our fidelity values are restricted to be $\leq 1$.  The closer the fidelity is to 1, the more likely our computation is to succeed.
 
 For a purely quantum mechanical system described by the Hamiltonian $H_{tot}$, the evolution trajectory completely determines the fidelity.
-The simplest and most obvious trajectory is $f(t) = 1 - t/T$ and $g(t) = t/T$ at a constant speed, or a straight line path through Hamiltonian space.
-Obviously the gap must go to zero as both $f$ and $g$ approach zero; in the absence of any Hamiltonian all states have equal energy.  Likewise scaling $f$ and $g$ by a uniform factor scales the gap by the same factor.  So if we imagine a heightmap of the gap as a function of $f$ and $g$, there is a minimum at $(f=0,g=0)$ and the gap increases along both axes.  
+The simplest and most obvious trajectory is $A(t) = 1 - t/T$ and $B(t) = t/T$ at a constant speed, or a straight line path through Hamiltonian space.
+Obviously the gap must go to zero as both $A$ and $B$ approach zero; in the absence of any Hamiltonian all states have equal energy.  Likewise scaling $A$ and $B$ by a uniform factor scales the gap by the same factor.  So if we imagine a heightmap of the gap as a function of $A$ and $B$, there is a minimum at $(A=0,B=0)$ and the gap increases along both axes.  
 There is no particular reason that a straight line from $(1,0)$ to $(0,1)$ should maximize the fidelity; indeed we expect that some more complicated curve through Hamiltonian space, potentially including dynamically changing the evolution speed, will give the best results.
 Unfortunately, the physical \texttt{VESUVIUS} machine has a fixed trajectory, with the path and the evolution speed predetermined.  This trajectory is shown in Figure \ref{fig:trajectory}.
 This means that any results we measure are not only specific to machines of the specific type employed by D-Wave, but that even future models of theirs might have very different characteristics.  This is especially true a hypothetical future model that would allow changing the annealing schedule to suit the problem, or even better dynamically changing the annealing schedule on the fly.
