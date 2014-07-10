@@ -54,7 +54,7 @@ A complete \texttt{QSM} file might then look like
 \end{center}
 which would compile to a Hamiltonian which encodes the logic $a \wedge \neg b = c, x \vee y = b, c = \text{TRUE}$ and the resulting ground states will be those states for which the logic is satisfied.
 
-The graph representation of the above Hamiltonian if a four vertex graph consisting of a K3 with an extra vertex connected to one of vertices in the K3.  Such a graph is not directly implementable on the \texttt{VESUVIUS} machine, and so before evaluating it we would need to \emph{embed} it.
+The graph representation of the above Hamiltonian is a four vertex graph consisting of a K3 with an extra vertex connected to one of vertices in the K3.  Such a graph is not directly implementable on the \texttt{VESUVIUS} machine due to its connectivity, and so before evaluating it we would need to \emph{embed} it.
 
 \section{Embedding algorithm}
 \label{sec:embed_algo}
