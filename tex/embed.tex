@@ -1,6 +1,6 @@
 \chapter{Embedding}
 \section{Creating Problem Hamiltonians}
-Embedding is the name we give to the general process of translating a computational problem into something which is ready for an adiabatic quantum computer to evaluate.  As mention in Section \ref{sec:prob_ham}, the first step is to generate a problem Hamiltonian.  We employ two methods for finding suitable problem Hamiltonians.  The first, using linear programming, is suitable for small Hamiltonians (generally only a few variables in size).  The second is to use the software \texttt{QCC} which takes advantage of the gluing theorem to stitch together a problem Hamiltonian out of smaller sub-Hamiltonians.
+Embedding is the name we give to the general process of translating a computational problem into something which is ready for an adiabatic quantum computer to evaluate.  As mentioned in Section \ref{sec:prob_ham}, the first step is to generate a problem Hamiltonian.  We employ two methods for finding suitable problem Hamiltonians.  The first, using linear programming, is suitable for small Hamiltonians (generally only a few variables in size).  The second is to use the software \texttt{QCC} which takes advantage of the gluing theorem to stitch together a problem Hamiltonian out of smaller sub-Hamiltonians.
 The second step in the embedding process is to translate our problem Hamiltonians, which generally may have arbitrary topologies, coupling values, number of variables etc. into Hamiltonians which an adiabatic quantum computer is capable of physically implementing.
 
 These are not the only methods of generating problem Hamiltonians.  The programmatic style described above seems natural for solving actual computational problems, but e.g. if one wanted to go a more academic computer science route one could reduce one's problems to known NP-Complete problems and evaluate those.  Lucas \cite{lucas} handily provides a compilation of ising formulations of a variety of different NP-Complete suitable for such an approach.
@@ -26,7 +26,7 @@ This is a slightly unusual use for LP; normally the finding the set of $x_i$'s t
 Minimizing the sum of the coupling values simply helps to keep the number of different coupling values small and the spread between them down.  This will be important because physical adiabatic quantum computers can only implement a finite number of different coupling values in finite ranges. 
 
 Unfortunately while this method allows us to find a set of couplings to encode the logic of any circuit, we require a constraint for each possible state of each of the variables.  For a binary circuit with $n$ variables, this is $2^n$ states.
-The above process for creating problem Hamiltonians is thus clearly NP-Hard, and becomes extremely computationally inefficient for larger circuit sizes.
+The above process for creating problem Hamiltonians is thus clearly exponentially hard, and becomes extremely computationally inefficient for larger circuit sizes.
 That said, this method retains utility for finding small sub-Hamiltonians to use as building blocks for larger problem Hamiltonians using \texttt{QCC} as described in the next section.
 
 \section{\texttt{QCC}}

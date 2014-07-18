@@ -21,7 +21,7 @@ So if the speed at which the Hamiltonian changes (the derivative term) is slow e
 While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
 
 \begin{equation}
-	H_f = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
+	\ham_f = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
 \end{equation}
 where $\sigma_i^Z$ is the z-pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant ``field'' spin.
 
@@ -57,26 +57,26 @@ Clamping is the process whereby we take a Hamiltonian containing variables $s_i$
 \section{Adiabatic Evolution}
 Once we have a Hamiltonian whose ground state encodes the problem we would like to solve, we need to set up the evolution.  The Adiabatic Theorem lets us transition from the ground state of one Hamiltonian to another, so we need an initial Hamiltonian.  In general almost any Hamiltonian which we know the ground state of will work, and we know that the choice of initial Hamiltonian affects the evolution in ways we can't predict.  For simplicity however, we use the following initial Hamiltonian:
 \begin{equation}
-	H_i = \sum_i^N B \sigma_i^x
+	\ham_i = \sum_i^N B \sigma_i^x
 \end{equation}
 where $B$ is some large constant.  This Hamiltonian has as it's ground state all the spins pointed along the (negative) x-axis (or equivalently, an equal superposition of $\ket{\pm z}$).  This is easy to prepare by applying a large magnetic field along the negative x direction.
 Once we've assembled both our initial and final Hamiltonians, we can conduct the evolution.  We call the total Hamiltonian $H_{tot}$, and it is simply the sum of the initial and final Hamiltonian:
 
 \begin{equation}
-	H_{tot} = A(t)H_i + B(t)H_f
+	\ham_{tot} = A(t)\ham_i + B(t)\ham_f
 \end{equation}
 
 where $f$ and $g$ are dimensionless functions of time such that $A(0) = B(T) = 1$ and $A(T) = B(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $A$ and $B$ describe the \emph{evolution path}.  Combining the evolution path with the speed at which the Hamiltonian is changing (or just the speed), that is $\frac{\partial A}{\partial t}$ and $\frac{\partial B}{\partial t}$, gives us the evolution trajectory.  
 
-Given a ground state of $H_{tot}$, $\ket{\psi_{gs}}$, the \emph{fidelity} is the probability of measuring $\psi_{gs}$, or $|\braket{\psi_{gs}|H_f|\psi_{gs}}|^2$.  If there are $N$ correct answer to our computation, and thus $\ket{\psi_N}$ degenerate ground states, the fidelity is defined as
+Given a ground state of $\ham_{tot}$, $\ket{\psi_{gs}}$, the \emph{fidelity} is the probability of measuring $\psi_{gs}$, or $|\braket{\psi_{gs}|\ham_f|\psi_{gs}}|^2$.  If there are $N$ correct answer to our computation, and thus $\ket{\psi_N}$ degenerate ground states, the fidelity is defined as
 
 \begin{equation}
-	F = \sum_{i=0}^N \braket{\psi_i|H_f|\psi_i}
+	F = \sum_{i=0}^N \braket{\psi_i|\ham_f|\psi_i}
 \end{equation}
 
 For a perfectly annealed system, the fidelity should go to one as the annealing time increases.  Since any real annealing will not be in the infinite anneal time limit, in practice our fidelity values are restricted to be $\leq 1$.  The closer the fidelity is to 1, the more likely our computation is to succeed.
 
-For a purely quantum mechanical system described by the Hamiltonian $H_{tot}$, the evolution trajectory completely determines the fidelity.
+For a purely quantum mechanical system described by the Hamiltonian $\ham_{tot}$, the evolution trajectory completely determines the fidelity.
 The simplest and most obvious trajectory is $A(t) = 1 - t/T$ and $B(t) = t/T$ at a constant speed, or a straight line path through Hamiltonian space.
 Obviously the gap must go to zero as both $A$ and $B$ approach zero; in the absence of any Hamiltonian all states have equal energy.  Likewise scaling $A$ and $B$ by a uniform factor scales the gap by the same factor.  So if we imagine a heightmap of the gap as a function of $A$ and $B$, there is a minimum at $(A=0,B=0)$ and the gap increases along both axes.  
 There is no particular reason that a straight line from $(1,0)$ to $(0,1)$ should maximize the fidelity; indeed we expect that some more complicated curve through Hamiltonian space, potentially including dynamically changing the evolution speed, will give the best results.
