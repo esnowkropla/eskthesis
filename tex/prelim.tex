@@ -28,9 +28,24 @@ Figure \ref{fig:short_fidelity} shows the same data as in Figure \ref{fig:fideli
 \end{figure}
 
 \section{Single Qubyte Hamiltonian}
-The Hamiltonian shown in the above figures is large and reasonably complicated, with blocks of clauses and chains of clone spins spread across many qubytes.  Simplifying the Hamiltonian until we see smooth fidelity vs. time curves as we expect, and then increasing the complicating factors until we see the oscillations emerge would let us figure out what's causing them.  To that end a simple Hamiltonian consisting of a single qubyte of spins and encoding the logic of a single SAT clause was evaluated in the same fashion as the earlier ``6\_018'': runs at anneal times from 20 $\mu$s to 500 $\mu$s with 1000 reads per run.  
+The Hamiltonian shown in the above figures is large and reasonably complicated, with blocks of clauses and chains of clone spins spread across many qubytes.  Simplifying the Hamiltonian until we see smooth fidelity vs. time curves as we expect, and then increasing the complicating factors until we see the oscillations emerge would let us figure out what's causing them.  To that end a simple Hamiltonian ``k44'' consisting of a single qubyte of spins and encoding the logic of a single SAT clause was evaluated in the same fashion as the earlier ``6\_018'': runs at anneal times from 20 $\mu$s to 500 $\mu$s with 1000 reads per run.  
 
 Figure \ref{fig:k44_comparison} shows the results of two such sweeps.  While the fidelity is higher than in the larger Hamiltonian's case, the short-time oscillations are still present.  The fidelity increase is in line with our expectations; as the number of spins grows the gap shrinks and fidelity drops for a given anneal time.  The continued presence of the short-time oscillations indicates that they're not simply a result of ``difficulty'' of the Hamiltonian (i.e. the gap or the problem size), but some other factor.
+
+\begin{table}
+	\begin{center}
+\begin{tabular}{ | l | l | l | l |}
+	\hline
+	\multicolumn{4}{|c|}{k44 Hamiltonian} \\ \hline
+	\multicolumn{2}{|c|}{Fields} & \multicolumn{2}{c|}{Couplings} \\ \hline
+	A & 1.0 & A,B & 1.0 \\
+	B & 1.0 & A,D & -2.0 \\
+	C & -1.0 & B,D & -2.0 \\
+	D & -3.0 & C,D & 1.0 \\ \hline
+\end{tabular}
+\end{center}
+\caption[k44 Hamiltonian]{The fields and couplings making up the Hamiltonian ``k44''.}
+\end{table}
 
 \begin{figure}
 	\includegraphics{img/k44.eps}
@@ -55,4 +70,22 @@ Figure \ref{fig:test_6_hist} is a pair of histograms showing all 1000 results of
 	\label{fig:test_6_hist}
 \end{figure}
 
-Unfortunately there is not much we can do with such low fidelities, so the rest of the results will focus on simpler Hamiltonians such as ones which occupy single K44s.  This means we cannot benchmark the \texttt{VESUVIUS} machine to any degree since actual 3-SAT problems, even those as small as 6 problem variables, are too difficult for the machine to solve reliably.
+Unfortunately there is not much we can do with such low fidelities, so the rest of the results will focus on simpler Hamiltonians such as ones which occupy single K44s.  This means we cannot benchmark the \texttt{VESUVIUS} machine to any degree as was the initial plan since actual 3-SAT problems, even those as small as 6 problem variables, are too difficult for the machine to solve reliably.
+
+Having carried out these preliminary results, we have established a framework for evaluating the \texttt{VESUVIUS} machine: ascertain the cause of the large uncertainty in the short-time evolution results, using simpler Hamiltonians; measure the effect that number of spins has in a more fine grained manner; and check the intra-run results to see how much of an effect read noise has.
+\begin{table}
+	\begin{center}
+\begin{tabular}{ | l | l | l | l |}
+	\hline
+	\multicolumn{4}{|c|}{k44\_and Hamiltonian} \\ \hline
+	\multicolumn{2}{|c|}{Fields} & \multicolumn{2}{c|}{Couplings} \\ \hline
+	A & 1.0 & A,B & 1.0 \\
+	B & -1.0 & A,D & -2.0 \\
+	C & 3.0 & B,D & -2.0 \\
+	D & -1.0 & C,D & -1.0 \\ \hline
+\end{tabular}
+\end{center}
+\caption[k44\_and Hamiltonian]{The fields and couplings that make up the Hamiltonian ``k44\_and''.  This single qubyte Hamiltonian has a single non-degenerate ground state: $\uparrow\uparrow\downarrow\uparrow$ }
+\end{table}
+
+The main Hamiltonian for the rest of the results will be ``k44\_and'', a single qubyte Hamiltonian similar to ``k44'' but featuring only a single non-degenerate ground state.

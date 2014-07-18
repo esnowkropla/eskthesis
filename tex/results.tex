@@ -22,56 +22,60 @@ The combined results of the running and rolling averages would seem to indicate 
 	\label{fig:rolling_avg}
 \end{figure}
 
-\section{Short-time oscillations}
-Looking to expand on the results of Chapter \ref{chap:prelim}, multiple sweeps of data were collected from a Hamiltonian labelled ``k44\_and''.  Figure \ref{fig:results_avg} shows the resulting fidelity estimates as a function of time.  This Hamiltonian not only occupies a single qubyte like ``k44'', but there is only one unique ground state.  These properties were chosen to attempt to minimize complicating factors.  Runs were carried out at annealing times from 20 $\mu$s to 20 ms as before.  Each run consisted of 100 reads, and 35 different runs were conducted at each anneal time.  Each fidelity estimate consists of a weighted average of each of the individual run estimates, weighted by the binomial error $\sigma$ for that run.
-The error estimate at each anneal time is the standard deviation of the distribution of the individual run estimates.
-
-Unlike in Chapter \ref{chap:prelim}, averaging over many runs at the same anneal time has managed to remove the short-time oscillations.  Figure \ref{fig:hist} shows a histogram of fidelities measured for ``k44\_and'' at an anneal time of 20 $\mu$s.  The Gaussian shape suggests that there are two effects going on: first, there is a value of the fidelity determined mainly by the quantum annealing (at the centre of the distribution) and second, that there is some noise applied over the fidelity from run to run.  The most likely source of this seems to be the programming error from imprecision of the physical couplings (see Sections \ref{sec:noise} and \ref{sec:coupling}).  If the noise in programming the couplings is high enough that if two adjacent couplings end up close enough together then the fidelity will drop because instead of the state we expect being the ground state and thus the most common, it will actually be some higher energy excited state and thus if the annealing is carried out successfully will have low probability of being found.  In the other scenario where two adjacent couplings are randomly bounced away from each other, it is entirely possible that in addition to the ground state being correctly encoded the gap is larger, thus increasing the fidelity.
+\section{Short-Time Oscillations}
+The Hamiltonian ``k44\_and'' was evaluated for times ranging from 20 $\mu$s to 20 ms, with 4 runs taken at each time point and 100 reads per run.  Figure \ref{fig:results_avg} shows these results.  Each run produced as estimated fidelity as in Chapter \ref{chap:prelim}, and the results shown here were synthesized by making a weighted average of each of the individual run's estimated fidelities.  The error bars shown here are the standard deviations of the means of the weighted averages, so small when the four runs produced nearly the same result and large when there was a large spread.  The short time oscillations are not entirely removed, although our estimates of the standard deviation matches up to the observed data much better; the trend of the data points falls almost entirely within the error bars.
 
 \begin{figure}
-	%includegraphics
-	\caption[Averaged Anneal Results]{Fidelity vs anneal time with each data point averaged over multiple different runs.  Each run was used to estimate the fidelity independently as in Chapter \ref{chap:prelim}, with the final estimate the weighted average of each run.  The errorbars reflect the standard deviation of the distribution of estimates from each run.}
+	\includegraphics{img/final_single_k44.eps}
+	\caption[Averaged Anneal Results]{Fidelity vs anneal time with each data point averaged over four different runs for the single qubyte ``k44\_and'' with a clone coupling value of -9.  Each run was used to estimate the fidelity independently as in Chapter \ref{chap:prelim}, with the final estimate the weighted average of each run.  The errorbars reflect the standard deviation of the distribution of estimates of the runs.}
 	\label{fig:results_avg}
 \end{figure}
 
-\begin{figure}
-	%includegraphics
-	\caption[Estimated Fidelity Histogram]{Histogram of the estimated fidelities for each run of the Hamiltonian ``k44\_and'' with an anneal time of 20 $\mu$s.  The shape appears roughly Gaussian, indicating that while there is a random factor in the fidelity that varies from run to run, there is still a central value that we take in this case to be roughly FIXME.}
-	\label{fig:hist}
-\end{figure}
-
-\begin{figure}
-	%includegraphics
-	\caption[Fidelity Distribution vs. Time]{This figure shows the breadth of the distribution of estimated fidelities, i.e. the standard deviation $\sigma$ as a function of the annealing time for the Hamiltonian ``k44\_and''.  As the annealing time increases, the short-time oscillation effect observed in the preliminary results dies off and the distribution narrows.}
-	\label{fig:std_time}
-\end{figure}
-
-Figure \ref{fig:std_time} shows the standard deviation of the fidelity estimates from evaluation of ``k44\_and'' as a function of the annealing time.  As we saw in the previous results, the large oscillations observed in the short-time fidelity die away as the annealing time increases.  This quantifies our earlier observation of the short-time oscillations: there are two regimes of the annealing, one below $\sim 500$ $\mu$s where the standard deviation is $\sim$ FIXME and one above $\sim 500$ $\mu$s where the standard deviation quickly drops down to FIXME.
-
-This still does not explain \emph{why} the short-time oscillations do not persist into longer annealing times.  The above argument regarding overlap of the physical couplings applies just as well to annealing at longer times.
-
 \section{Clone coupling value}
 \label{sec:coupling}
+
+\begin{figure}
+	\includegraphics{img/n_8_t_v_c.eps}
+	\caption[Variable Clone Coupling Fidelity]{Heat map of the fidelity as a function of anneal time and clone coupling value for the single qubyte ``k44\_and''.  The measured fidelity drops of rapidly with increasing clone coupling, but low clone coupling values do not preserve the ground state intact.  The sudden drop in fidelity at the smallest clone coupling value is caused by incorrect states with the same energy as the ground state.}
+	\label{fig:clone_coupling}
+\end{figure}
+
 As discussed in Sections \ref{sec:embed_algo} and \ref{sec:resolution}, while for an ideal machine maximizing the clone coupling value would ensure that adding clones did not alter the ground states of our problem Hamiltonians, the \texttt{VESUVIUS} machine can only implement 15 different clone coupling values.  In addition, these values must be evenly spaced.  If we were to use a clone coupling value of $-14$ in a problem Hamiltonian which natively had coupling values of $-2,-1,1,2$, this would result in compressing each of the positive and negative couplings into one machine value.  The machine only implements couplings of the form 
 \begin{equation}
 	\pm\frac{x}{7}, 1 \le x \le 7
 \end{equation}
-so the above example would result in a physically implemented Hamiltonian of $-1/7, -1/7, 1/7, 1/7$ in addition to the clone coupling of $-1$.  Most of the time this will result in a malformed Hamiltonian with incorrect ground states.
+so the above example would result in a physically implemented Hamiltonian of -1/7, -1/7, 1/7, $1/7$ in addition to the clone coupling of $-1$.  Most of the time this will result in a malformed Hamiltonian with incorrect ground states.
 
 In addition to incorrect ground states, it is possible that the programming error in the machine is large enough to make the couplings $1/7$ and $2/7$ close enough to be likely to collide, whereas $1/7$ and $3/7$ could be far enough apart to be programmed correctly every time.  This could mean that even in scenarios where \texttt{VESUVIUS} has enough range to encode the problem Hamiltonian couplings correctly with a large clone coupling value we still don't want to do so.
 
 This means that when selecting a clone coupling value we must balance these two competing factors, the desire to make the clone coupling as large as possible from a Hamiltonian correctness standpoint, and the desire to make it as small as possible from a machine resolution viewpoint.  The Hamiltonian correctness issue is correctness and knowable at the time the Hamiltonian is constructed; however in general to know whether a given clone coupling is large enough or not requires diagonalizing the Hamiltonian, and if this were possible then that would enable us to solve the initial computational problem directly.
 The machine resolution problem is not necessarily the same from run to run; it could be that the compression of the problem Hamiltonian caused by the clone coupling value only makes it more likely for the machine to end up in an excited state.
 
-To empirically examine the impact of the value of the clone coupling, the ``k44\_and'' Hamiltonian was embedded multiple different times with a clone coupling value ranging from -1 to -14 (from the smallest coupling in the problem Hamiltonian to twice the native resolution of the machine).  Figure \ref{fig:clone_coupling} shows the results of annealing these Hamiltonians from 20 $\mu$s to 20 ms.  Not only does fidelity increase as the clone coupling value is decreased, the short-time oscillations that we saw in Chapter \ref{chap:prelim} are removed.  At longer anneal times the difference in fidelity is reduced, and the same long-time drop in fidelities that was observed in other Hamiltonians continues.  This means that the mechanism for the long-time fidelity drop is not strongly impacted by the clone coupling value, which is what we would expect.
-
-This provides more evidence that the short-time oscillations are caused by programming error in the \texttt{VESUVIUS} machine; if two couplings in the problem Hamiltonian are compressed together the correct ground states could still be formed in the resulting physical Hamiltonian if the couplings were randomly perturbed in the right directions, but this process would be random and differ greatly from run to run.
-
 \begin{figure}
-	%\includegraphics{}
-	\caption[Variable Clone Coupling Fidelity]{The change in fidelity as the clone coupling value is scaled from -1 to -14.  The top view shows the scaling over the full time range 20 $\mu$s to 20 ms, while the bottom shows the same data zoomed in on the times 20 $\mu$s to 500 $\mu$s.  The fidelity increases with reducing clone coupling value, but using too small of a clone coupling value can result in incorrect ground states.}
-	\label{fig:clone_coupling}
+	\includegraphics{img/t_c.eps}
+	\caption[Fidelity Std.]{Heat map of the standard deviation of the estimated fidelity as a function of clone coupling value and annealing time for the single qubyte ``k44\_and''.  After $\sim$ 1000 $\mu$s the error drops down as we enter the long-time regime and the short-time oscillations die off.  The spread of the fidelity is also much lower for a clone coupling value of -3, which corresponds to the higher fidelities.}
+	\label{fig:std_time}
 \end{figure}
 
+To empirically examine the impact of the value of the clone coupling, the ``k44\_and'' Hamiltonian was embedded multiple different times with a clone coupling value ranging from -1 to -14 (from the smallest coupling in the problem Hamiltonian to twice the native resolution of the machine).  Figure \ref{fig:clone_coupling} shows a heat map of the results of annealing these Hamiltonians from 20 $\mu$s to 20 ms.  Not only does fidelity increase as the clone coupling value is decreased, the short-time oscillations that we saw in Chapter \ref{chap:prelim} are removed.  This is shown very clearly in Figure \ref{fig:std_time}, which displays the standard deviation of the estimated fidelity as a function of anneal time and clone coupling value.
+
+At longer anneal times the difference in fidelity is reduced, and the same long-time drop in fidelities that was observed in other Hamiltonians continues.  This means that the mechanism for the long-time fidelity drop is not strongly impacted by the clone coupling value.
+
+The fidelity drops off strongly from its peak at a clone coupling value of -3.  Each of the higher clone coupling values corresponds to more and more compression of the computational couplings into fewer physical couplings.  This pattern does not continue to the -1 coupling, because that clone coupling value results in a malformed Hamiltonian where a domain wall forms in the ferromagnetic couplings, leading to what should be an excited state having the same energy as the ground state.  The ``k44\_and'' Hamiltonian's largest coupling value is $|3.0|$, which suggests that a clone coupling value of -3 performs well because it does not compress any couplings together.
+
 \section{Size scaling}
-The final property studied was the 
+The final property studied was the size scaling behaviour of ``k44\_and''.  This was done by translating the fields and couplings over to new qubytes.  The resulting Hamiltonian still only had one ground state, but was able to be scaled from 1 to 55 qubytes, a range of 8 to 440 spins.  Figure \ref{fig:time_spins} shows the fidelity plotted against anneal time and number of spins, for the clone coupling value which maximizes fidelity (-3).  The same plot for other clone couplings looks similar but with lower fidelity values across the board.  Larger Hamiltonians show similar behaviour to the original one qubyte ``k44\_and'', but fall off even faster with increased anneal time.
+
+\begin{figure}
+	\includegraphics{img/pcolor_c_3.eps}
+	\caption[Fidelity vs Time vs Number of Qubits]{Heat map of the estimated fidelity as a function of annealing time and number of spins in the Hamiltonian, with a clone coupling value of -3.}
+	\label{fig:time_spins}
+\end{figure}
+
+\begin{figure}
+	\includegraphics{img/trend.eps}
+	\caption[Fidelity vs Number of Qubits]{Fidelity as a function of number of qubits for an anneal time of 20 $\mu$s and a clone coupling value of -3.  Green line shows line of best fit, with parameters: intercept of 0.91 and a slope of $-0.0017$.}
+	\label{fig:trend}
+\end{figure}
+
+Figure \ref{fig:trend} shows the fidelity for annealing for 20 $\mu$s with a clone coupling value of -3 (that is, the values which maximize fidelity) as a function of number of spins.  The result is very close to a straight line; a linear regression is shown against the data.  This result would seem to indicate that for this problem, the \texttt{VESUVIUS} machine scales linearly.

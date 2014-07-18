@@ -1,4 +1,5 @@
 \chapter{Embedding}
+\label{chap:embed}
 \section{Creating Problem Hamiltonians}
 Embedding is the name we give to the general process of translating a computational problem into something which is ready for an adiabatic quantum computer to evaluate.  As mentioned in Section \ref{sec:prob_ham}, the first step is to generate a problem Hamiltonian.  We employ two methods for finding suitable problem Hamiltonians.  The first, using linear programming, is suitable for small Hamiltonians (generally only a few variables in size).  The second is to use the software \texttt{QCC} which takes advantage of the gluing theorem to stitch together a problem Hamiltonian out of smaller sub-Hamiltonians.
 The second step in the embedding process is to translate our problem Hamiltonians, which generally may have arbitrary topologies, coupling values, number of variables etc. into Hamiltonians which an adiabatic quantum computer is capable of physically implementing.
@@ -7,19 +8,44 @@ These are not the only methods of generating problem Hamiltonians.  The programm
 
 \section{Linear Programming}
 The requirements we have for a problem Hamiltonian can be described using a system of constraints, and solved using the techniques of linear programming (LP).
-Briefly, LP is a method to optimize some objective function subject to linear equality and linear inequality constraints i.e. constraints of the form $ax + by < c$ (thus the name \emph{linear} programming).  There are many software packages that implement LP solving, both Free Software and proprietary.  This makes it an easily usable technique.
+Briefly, LP is a method to optimize some objective function subject to linear equality and linear inequality constraints.  There are three standard parts that describe a linear programming problem:
 
-The way in which we use LP to create a problem Hamiltonian is to set our objective function to the sum of the value of the couplings in the Hamiltonian; for a complete graph we have $N = \frac{1}{2}n(n-1) + n$ fields and couplings, so our objective function will be of the form $\sum_{i=0}^N x_i$ where each $x_i$ is the value of either a field or coupling.
+\begin{itemize}
+	\item A linear function to be maximized or minimized
+		\subitem $f(x_0,x_1) = c_0x_0 + c_1x_1$
+	\item Constraint Matrix $A$:
+		\subitem $A\vec{x} \le \vec{b} $
+	\item Non-negative variables
+		\subitem $x_i \ge 0$ $\forall i$
+\end{itemize}
 
-We then create a constraint for each possible state of the system; for states which satisfy the logic we wish to encode, we add a constraint such that 
 
-\begin{equation}
-	\sum_i^n s_i x_i + \sum_{i=n,j > i}^N s_i s_j x_i + K = 0
-	\label{eq:LP}
-\end{equation} 
+(thus the name \emph{linear} programming).  There are many software packages that implement LP solving, both Free Software and proprietary.  This makes it an easily accessible technique.
 
-where $s_i$ is the value of spin $i$ ($\pm 1$) in the state we are encoding and $K$ is a constant which will take on the value of the ground state energy.  The first sum in the constraint adds the energy contributions from the fields, while the second sum adds the energy contributions from the couplings.
-For each state which does NOT satisfy the logic that we wish to encode, we add a constraint of the same form as Equation \ref{eq:LP} except that the total sum must be \emph{greater} than zero rather than equal to zero.
+To use linear programming to create a problem Hamiltonian with N spins we first assign a variable $x_i$ for each field and each coupling that could be in the end result; this is $N(N-1)/2 + N$ or $N(N + 1)/2$ ($N$ choose $2$ variables).  Then we add a constraint for each possible assignment of the spins, making $2^N$ constraints.  In these constraints we have every sign combination of the variables that correspond to fields, e.g.
+
+\begin{align}
+	 c_0 &  = x_0 + x_1 + x_2 \nonumber \\ 
+	 c_1 & = x_0 + x_1 - x_2 \nonumber \\ 
+	 c_2 & = x_0 - x_1 + x_2 \nonumber \\
+	 c_3 & = x_0 - x_2 - x_2 \\
+		 & \mathrm{etc.} \nonumber
+\end{align}
+
+In each constraint we also add the variables representing couplings; the sign of each coupling variable should be the product of the two variables that represent the two spins the coupling connects.  Now for each state which we want to be part of the ground state we set the value of the constraint equal to $K$; for each state that is \emph{not} part of the ground state, we enforce that the corresponding constraint is strictly greater than $K$.  For a three spin gate, the final constraints $c_i$ would equal
+
+\begin{align}
+	c_0 &= -x_0 - x_1 - x_2 + x_3 + x_4 + x_5 + k &= 0 \nonumber\\
+	c_1 &= -x_0 - x_1 + x_2 + x_3 - x_4 - x_5 + k &\ge 1 \nonumber\\
+	c_2 &= -x_0 + x_1 - x_2 - x_3 + x_4 - x_5 + k &= 0 \nonumber\\
+	c_3 &= -x_0 + x_1 + x_2 - x_3 - x_4 + x_5 + k &\ge 1 \nonumber\\
+	c_4 &= x_0 - x_1 - x_2 - x_3 - x_4 + x_5 + k &= 0 \nonumber\\
+	c_5 &= x_0 - x_1 + x_2 - x_3 + x_4 - x_5 + k &\ge 1 \nonumber\\
+	c_6 &= x_0 + x_1 - x_2 + x_3 - x_4 - x_5 + k &\ge 1 \nonumber\\
+	c_7 &= x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + k &= 0 
+\end{align}
+
+For all three spin gates the constraints would be identical except for which states are $k = 0$ and which are $k \ge 1$.  This particular set of constraints will produce an \texttt{AND} gate; each of the variables $x_0, x_1, x_2$ in the constraint equal to zero matches the truth table for \texttt{AND} with input variables $x_0, x_1$ and output variable $x_2$.
 
 The combined effect of all of these constraints is that when we solve the system for the set of variables $x_i$ which minimize the objective function, states which encode the desired logic will have an energy of $-K$ and states which do not encode the desired logic will have an energy greater than $-K$.
 This is a slightly unusual use for LP; normally the finding the set of $x_i$'s that optimize the objective function is the goal, but for us finding the $x_i$'s which satisfy the constraints if the central objective.
@@ -58,18 +84,18 @@ The graph representation of the above Hamiltonian is a four vertex graph consist
 
 \section{Embedding algorithm}
 \label{sec:embed_algo}
-Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same structure as the Chimera graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
-Thus we can decrease the connectivity of the input graph until it is sparse enough to be isomorphic to a physical machine.  The following algorithm is essentially equivalent to one presented in \cite{choi1}.
-We expect that translating complete graphs onto graphs with constant neighbour counts to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph $\sim n^2$).
-Ideally, to ensure that each clone spin's ground state is the same as it's parent we would have $J_{ij} << J_{clone} \forall i,j$.  Because of physical limits of the machine (especially the resolution mentioned above) large values of $J_{clone}$ may not maximize fidelity: for a machine with finite resolution, having a large $J_{clone}$ may compress other coupling values together such that the ground state starts to overlap with higher energy state.  On the other hand a too small value of $J_{clone}$ may result in ground states in which the clones are not aligned, which will almost certainly also produce incorrect ground states. Thus we have to find an empirical value of $J_{clone}$ that maximizes the fidelity while preserving the ground states.
+Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same shape as the graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
+This allows us to decrease the connectivity of the problem Hamiltonian until it is sparse enough to be the same shape as the physical machine.  The following algorithm is essentially equivalent to one presented in \cite{choi1}.
+We expect that translating complete graphs onto graphs with constant connectivity to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph is $\sim n^2$).
+Ideally, to ensure that each clone spin's ground state is the same as it's parent we would have $J_{ij} << J_{clone} \forall i,j$.  Because of physical limits of the machine (especially the resolution mentioned in Section \ref{sec:resolution}) large values of $J_{clone}$ may not maximize fidelity: for a machine with finite resolution, having a large $J_{clone}$ may compress other coupling values together such that the ground state starts to overlap with higher energy state.  On the other hand a too small value of $J_{clone}$ may result in ground states in which the clones are not aligned, which will almost certainly also produce incorrect ground states. Thus we have to find an empirical value of $J_{clone}$ that maximizes the fidelity while preserving the ground states.
 
 The embedding algorithm is as follows:
 
 \emph{\textbf{Definitions:}}
 
-Designate the input Hamiltonian graph $V$ and the output Chimera graph $G$.  Label the spins in $V$ and $G$ as $V_i$ and $G_i$ respectively.
+Designate the input Hamiltonian graph $V$ and the output graph $G$.  Label the spins in $V$ and $G$ as $V_i$ and $G_i$ respectively.
 We define the \emph{clone map} $C_i$ as the set of spins $[i,j \ldots]$ which have the same logical value as their parent spin: so for example the clone map of spin 5, $C_5$, might be $[2,3,13]$ which would mean that spins 2, 3, 5 and 13 all share the same logical value.  
-We define a mapping $M$ between logical spins in graph $V$ and computation spins in graph $G$.  That is, spin $V_{12}$ representing the 12th variable in a SAT problem might be mapped to $G_{187}$, the 187th machine spin.
+We define a mapping $M$ between logical spins in graph $V$ and computation spins in graph $G$.  For example, spin $V_{12}$ representing the 12th variable in a SAT problem might be mapped to $G_{187}$, the 187th machine spin.
 
 We also define a \emph{clone coupling} value which is as large as possible and ferromagnetic; this attempts to ensure that all the members of a clone map are aligned in the ground state.  In the final $G$, each member of a clone map should have a clone coupling connecting it to at least one other member of the clone map.
 
@@ -97,4 +123,4 @@ Each term in $V$, both fields and couplings, should now have a corresponding ter
 	\label{fig:embedding}
 \end{figure}
 
-This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the Chimera graph), however, the principle should be generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead by allocating the input graph spins along the diagonal.
+This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the shape of the \texttt{VESUVIUS}), however, the principle should be generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead by allocating the input graph spins along the diagonal.
