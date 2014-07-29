@@ -40,20 +40,20 @@ The Hamiltonian ``k44\_and'' was evaluated for times ranging from 20 $\mu$s to 2
 	\label{fig:clone_coupling}
 \end{figure}
 
-As discussed in Sections \ref{sec:embed_algo} and \ref{sec:resolution}, while for an ideal machine maximizing the clone coupling value would ensure that adding clones did not alter the ground states of our problem Hamiltonians, the \texttt{VESUVIUS} machine can only implement 15 different clone coupling values.  In addition, these values must be evenly spaced.  If we were to use a clone coupling value of $-14$ in a problem Hamiltonian which natively had coupling values of $-2,-1,1,2$, this would result in compressing each of the positive and negative couplings into one machine value.  The machine only implements couplings of the form 
+As discussed in Sections \ref{sec:embed_algo} and \ref{sec:resolution}, while for an ideal machine maximizing the clone coupling value would ensure that adding clones did not alter the ground states of our problem Hamiltonians, the \machine machine can only implement 15 different clone coupling values.  In addition, these values must be evenly spaced.  If we were to use a clone coupling value of $-14$ in a problem Hamiltonian which natively had coupling values of $-2,-1,1,2$, this would result in compressing each of the positive and negative couplings into one machine value.  The machine only implements couplings of the form 
 \begin{equation}
 	\pm\frac{x}{7}, 1 \le x \le 7
 \end{equation}
 so the above example would result in a physically implemented Hamiltonian of -1/7, -1/7, 1/7, $1/7$ in addition to the clone coupling of $-1$.  Most of the time this will result in a malformed Hamiltonian with incorrect ground states.
 
-In addition to incorrect ground states, it is possible that the programming error in the machine is large enough to make the couplings $1/7$ and $2/7$ close enough to be likely to collide, whereas $1/7$ and $3/7$ could be far enough apart to be programmed correctly every time.  This could mean that even in scenarios where \texttt{VESUVIUS} has enough range to encode the problem Hamiltonian couplings correctly with a large clone coupling value we still don't want to do so.
+In addition to incorrect ground states, it is possible that the programming error in the machine is large enough to make the couplings $1/7$ and $2/7$ close enough to be likely to collide, whereas $1/7$ and $3/7$ could be far enough apart to be programmed correctly every time.  This could mean that even in scenarios where \machine has enough range to encode the problem Hamiltonian couplings correctly with a large clone coupling value we still don't want to do so.
 
 This means that when selecting a clone coupling value we must balance these two competing factors, the desire to make the clone coupling as large as possible from a Hamiltonian correctness standpoint, and the desire to make it as small as possible from a machine resolution viewpoint.  The Hamiltonian correctness issue is correctness and knowable at the time the Hamiltonian is constructed; however in general to know whether a given clone coupling is large enough or not requires diagonalizing the Hamiltonian, and if this were possible then that would enable us to solve the initial computational problem directly.
 The machine resolution problem is not necessarily the same from run to run; it could be that the compression of the problem Hamiltonian caused by the clone coupling value only makes it more likely for the machine to end up in an excited state.
 
 \begin{figure}
 	\includegraphics{img/t_c.eps}
-	\caption[Fidelity Std.]{Heat map of the standard deviation of the estimated fidelity as a function of clone coupling value and annealing time for the single qubyte ``k44\_and''.  After $\sim$ 1000 $\mu$s the error drops down as we enter the long-time regime and the short-time oscillations die off.  The spread of the fidelity is also much lower for a clone coupling value of -3, which corresponds to the higher fidelities.}
+	\caption[Fidelity Standard Deviation]{Heat map of the standard deviation of the estimated fidelity as a function of clone coupling value and annealing time for the single qubyte ``k44\_and''.  After $\sim$ 1000 $\mu$s the error drops down as we enter the long-time regime and the short-time oscillations die off.  The spread of the fidelity is also much lower for a clone coupling value of -3, which corresponds to the higher fidelities.}
 	\label{fig:std_time}
 \end{figure}
 
@@ -78,4 +78,4 @@ The final property studied was the size scaling behaviour of ``k44\_and''.  This
 	\label{fig:trend}
 \end{figure}
 
-Figure \ref{fig:trend} shows the fidelity for annealing for 20 $\mu$s with a clone coupling value of -3 (that is, the values which maximize fidelity) as a function of number of spins.  The result is very close to a straight line; a linear regression is shown against the data.  This result would seem to indicate that for this problem, the \texttt{VESUVIUS} machine scales linearly.
+Figure \ref{fig:trend} shows the fidelity for annealing for 20 $\mu$s with a clone coupling value of -3 (that is, the values which maximize fidelity) as a function of number of spins.  The result is very close to a straight line; a linear regression is shown against the data.  This result would seem to indicate that for this problem, the \machine machine scales linearly.

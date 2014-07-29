@@ -80,11 +80,11 @@ A complete \texttt{QSM} file might then look like
 \end{center}
 which would compile to a Hamiltonian which encodes the logic $a \wedge \neg b = c, x \vee y = b, c = \text{TRUE}$ and the resulting ground states will be those states for which the logic is satisfied.
 
-The graph representation of the above Hamiltonian is a four vertex graph consisting of a K3 with an extra vertex connected to one of vertices in the K3.  Such a graph is not directly implementable on the \texttt{VESUVIUS} machine due to its connectivity, and so before evaluating it we would need to \emph{embed} it.
+The graph representation of the above Hamiltonian is a four vertex graph consisting of a K3 with an extra vertex connected to one of vertices in the K3.  Such a graph is not directly implementable on the \machine machine due to its connectivity, and so before evaluating it we would need to \emph{embed} it.
 
 \section{Embedding algorithm}
 \label{sec:embed_algo}
-Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same shape as the graph that the \texttt{VESUVIUS} machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
+Once we have our problem Hamiltonians we need to convert them into Hamiltonians which have the same shape as the graph that the \machine machine has.  This is done by adding \emph{clone spins} into the graph: each clone spin has the same value in the ground state as one of the logical spins in the input graph.  
 This allows us to decrease the connectivity of the problem Hamiltonian until it is sparse enough to be the same shape as the physical machine.  The following algorithm is essentially equivalent to one presented in \cite{choi1}.
 We expect that translating complete graphs onto graphs with constant connectivity to require roughly a quadratic size penalty in the number of clone spins (as the number of connections in a complete graph is $\sim n^2$).
 Ideally, to ensure that each clone spin's ground state is the same as it's parent we would have $J_{ij} << J_{clone} \forall i,j$.  Because of physical limits of the machine (especially the resolution mentioned in Section \ref{sec:resolution}) large values of $J_{clone}$ may not maximize fidelity: for a machine with finite resolution, having a large $J_{clone}$ may compress other coupling values together such that the ground state starts to overlap with higher energy state.  On the other hand a too small value of $J_{clone}$ may result in ground states in which the clones are not aligned, which will almost certainly also produce incorrect ground states. Thus we have to find an empirical value of $J_{clone}$ that maximizes the fidelity while preserving the ground states.
@@ -123,4 +123,4 @@ Each term in $V$, both fields and couplings, should now have a corresponding ter
 	\label{fig:embedding}
 \end{figure}
 
-This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the shape of the \texttt{VESUVIUS}), however, the principle should be generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead by allocating the input graph spins along the diagonal.
+This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the shape of the \machine), however, the principle should be generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead by allocating the input graph spins along the diagonal.

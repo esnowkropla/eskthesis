@@ -1,12 +1,24 @@
 \chapter{Adiabatic Quantum Computing}
 \label{chap:aqc}
 
-MAP THE CHAPTER
+In this chapter we will go over the development of AQC as well as the physics of how it is supposed to work, finishing with 
+
+\section{A Brief History of AQC}
+The idea of expanding simulated annealing to include quantum effects to solve problems was initially introduced by Kadowaki and Nishimori.\cite{transverse}  The linking of quantum annealing to quantum computation was done slightly later by Farhi et. al in 2000.\cite{farhi}  The structure of AQC appears here entirely intact: evolving from easily prepared initial Hamiltonians into problem Hamiltonians via the adiabatic theorem.  Farhi et. al.\cite{farhi} lacks any experimental or theoretical arguments for the speed of AQC, or comparison to gate model quantum computing.  Farhi et. al. followed up with another paper\cite{farhi2} with some preliminary simulations of AQC carried out by numerically integrating Schr\"odinger's Equation.  These results seemed to indicate exponential speedup over classical algorithms for an NP-Complete problem, but due to the difficulty of simulating quantum mechanics on a classical computer the maximum problem size they could experiment with was quite small so they could not draw very broad conclusions.
+
+After this hopeful initial result it was shown by van Dam et. al.\cite{vandam} that, at least in principle, AQC is equivalent to gate model quantum computing.  Specifically they showed that adiabatic evolution taking time $T$ may be approximated by $O(T^2)$ unitary transformations of $n$ qubits.  However, van Dam et. al. also designed a class of minimization problems for which AQC has an exponential lower bound.  This was one of the earliest results in a controversy which continues to this day: how powerful are adiabatic quantum computers?  Proposed answers have included: being \emph{more} powerful than gate-model quantum computers, being able to solve NP-Complete problems efficiently; \emph{as} powerful as gate-model quantum computers; or no more powerful than classical computers.  Care must be taken to distinguish the questions of how powerful adiabatic quantum \emph{computing} is, and how powerful a \emph{given} adiabatic quantum computer is.
+
+More papers on this topic followed, including several from A. P. Young with others.\cite{young3}\cite{young2}\cite{young1}  Using Quantum Monte Carlo techniques, they were able to increase the size of analyzable Hamiltonians from 24 spins to 256 spins.  \cite{young1}
+Their results seemed to indicate the gap scaling exponentially with Hamiltonian size, characteristic of a first-order phase transition in the spin glass parameter.\cite{young2}
+
+Concurrent with this effort to characterize adiabatic quantum computers theoretically was an effort to build one.  Beginning with a single qubit\cite{qubit}, scaling to eight\cite{PhysRevB.82.024511} and then 128\cite{boixo2} and 512.\cite{pudenz}  While entanglement has been demonstrated to occur inside of this machine\cite{lanting}, the evidence for a quantum speedup is mixed,\cite{pudenz}\cite{boixo}\cite{smolin} with a very recent paper by R{\o}nnow et. al. suggesting that the \machine machine (as the 512 spin machine is called) is not asymptotically faster than a classical computer.
+
+In this work we carried out a variety of benchmarking on the \machine machine both to hopefully shed some light on the question of the speedup particular to this individual machine, and to validate out approach to problem compilation for AQC.
 
 \section{The Adiabatic Theorem}
 
 The central idea of Adiabatic Quantum Computation is solving problems by finding the ground states of specially constructed Hamiltonians.\cite{farhi}  Ground state relaxation is a form of analog computing where we rely on physics to do the calculating for us: we set up a physical system so that the ground state is the solution to our problem and let the system evolve.  Generally speaking, we expect that classical or quantum systems will still take exponentially long to reach this desired ground state for NP-hard problems.\cite{aaronson}
-By starting the system in an easy to prepare state (e.g. ferromagnetically aligned) and then evolving adiabatically into our prepared problem state AQC uses the \emph{adiabatic theorem} to (hopefully) avoid this exponential delay.
+By starting the system in an easy to prepare state (for example, if your system was composed of spins then an easy to prepare state would be all spins ferromagnetically aligned) and then evolving adiabatically into our prepared problem state AQC uses the \emph{adiabatic theorem} to (hopefully) avoid this exponential delay.
 
 The adiabatic theorem states that if a system is initially prepared in the ith energy level $\ket{\psi_i}$, and the Hamiltonian is evolved according to the adiabatic condition, the system will remain in the ith state after the evolution.  The adiabatic condition is:
 
@@ -14,10 +26,10 @@ The adiabatic theorem states that if a system is initially prepared in the ith e
 	\left | \frac{1}{\omega_{fi}}\frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right | << |E_f - E_i|
 \end{equation}
 
-where $E_i$ and $E_f$ are the energies of the initial and final states $\ket{\psi_i}$ and $\ket{\psi_f}$, $\hat{V}(t)$ is the time dependant part of the Hamiltonian and $\omega_{if} = \frac{E_f - E_i}{\hbar}$ is a convenient variable.  For a derivation of the adiabatic theorem see Appendix \ref{apx:aqc}.\cite{zettili}  When the adiabatic condition is satisfied the probability of transition from state $i$ to state $f$ is zero, that is
+where $E_i$ and $E_f$ are the energies of the initial and final states $\ket{\psi_i}$ and $\ket{\psi_f}$, $\hat{V}(t)$ is the time dependant part of the Hamiltonian and $\omega_{if} = \frac{E_f - E_i}{\hbar}$.  For a derivation of the adiabatic theorem see Appendix \ref{apx:aqc}.\cite{zettili}  When the adiabatic condition is satisfied the probability of transition from state $i$ to state $f$ is zero, that is
 
 \begin{equation}
-	|\braket{\psi(t\rightarrow\infty)|\psi(t=0)}|^2 \rightarrow 1
+	|\braket{\psi_f|\psi_i}|^2 \rightarrow 1
 \end{equation}
 
 So if the speed at which the Hamiltonian changes (the derivative term) is slow enough, and the gap $\Delta$ between the initial state and the other states ($\Delta = E_f - E_i$) is large enough, then the system won't transition into a new state.  
@@ -86,10 +98,10 @@ However, in this work we restrict ourselves to evaluating straight line paths th
 For small Hamiltonian we can simulate directly the process of quantum annealing by integrating the Schr\"odinger equation. For time dependent Hamiltonians such as ours, the general form of the Schr\"odinger equation is 
 
 \begin{equation}
-	i\hbar\frac{\partial}{\partial t} \Psi = \ham\Psi
+	i\hbar\frac{\partial}{\partial t} \ket{\psi} = \ham\ket{\psi}
 \end{equation}
 
-this is a linear partial differential equation which can be easily solved by numerical methods.  Using a fourth order Runge-Kutta method\cite{comp_book} we can find the overlap between the ground state $\ket{\psi_f}$ and the current state $\ket{\psi(t)}$ and plot this as a function of the annealing parameter.  Figure \ref{fig:simulate} shows the results of one such simulation.  This shows an eight spin Hamiltonian annealed with linear control parameters $A(t) = 1-t/T$ and $B(t) = t/T$.  The features correspond to what we expect from the adiabatic theorem: the fidelity starts low and climbs as the system evolves.  It does not reach one as we are not in the adiabatic limit because we are annealing for only a finite time.  We expect to see similar results to the one shown here from experimental data; deviations will show us how far our experiments depart from the assumptions of AQC.
+this is a system of linear partial differential equations which can be easily solved by numerical methods.  Using a fourth order Runge-Kutta method\cite{comp_book} we can find the overlap between the ground state $\ket{\psi_f}$ and the current state $\ket{\psi(t)}$ and plot this as a function of the annealing parameter.  Figure \ref{fig:simulate} shows the results of one such simulation.  This shows an eight spin Hamiltonian annealed with linear control parameters $A(t) = 1-t/T$ and $B(t) = t/T$.  The features correspond to what we expect from the adiabatic theorem: the fidelity starts low and climbs as the system evolves.  It does not reach one as we are not in the adiabatic limit because we are annealing for only a finite time.  We expect to see similar results to the one shown here from experimental data; deviations will show us how far our experiments depart from the assumptions of AQC.
 \begin{figure}
 	\includegraphics{img/simulate.eps}
 	\caption[Simulated AQC]{Numerical simulation of adiabatic evolution by integrating the Schr\"odinger equation.}

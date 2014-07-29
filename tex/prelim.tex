@@ -54,7 +54,7 @@ Figure \ref{fig:k44_comparison} shows the results of two such sweeps.  While the
 \end{figure}
 
 \section{Boolean SAT Hamiltonian}
-The last preliminary investigation was conducted on a six variable, 21 clause 3-SAT Hamiltonian with two satisfying assignments, FIXME.  When embedded this Hamiltonian filled essentially the entire hardware graph.  Figure \ref{fig:test_6} shows the estimated fidelity from anneal times ranging from 20 $\mu$s to 500 $\mu$s, estimated from 1000 reads and single runs at each anneal time.  The fidelity is close to zero throughout the time range.  In contrast to our previously observed Hamiltonians, the \texttt{VESUVIUS} machine seems unable to successfully solve this particular problem instance.  
+The last preliminary investigation was conducted on a six variable, 21 clause 3-SAT Hamiltonian with two satisfying assignments, FIXME.  When embedded this Hamiltonian filled essentially the entire hardware graph.  Figure \ref{fig:test_6} shows the estimated fidelity from anneal times ranging from 20 $\mu$s to 500 $\mu$s, estimated from 1000 reads and single runs at each anneal time.  The fidelity is close to zero throughout the time range.  In contrast to our previously observed Hamiltonians, the \machine machine seems unable to successfully solve this particular problem instance.  
 
 Figure \ref{fig:test_6_hist} is a pair of histograms showing all 1000 results of annealing at 20 $\mu$s for both the ``6\_018'' Hamiltonian and the 3-SAT Hamiltonian.  The peak of the distribution for ``6\_018'' is near the ground state, while the peak of the distribution for the 3-SAT Hamiltonian is in the neighbourhood of the 10th excited state.  Presumably this is due to the energy levels of the 3-SAT Hamiltonian closing together where the ``6\_018'' levels do not.  The distribution of the results for the 3-SAT Hamiltonian is also broader, for reasons which are not clear.  Both of these Hamiltonians are much to large to be simulated classically, so we cannot predict how the energy levels change over the annealing to explain the distribution differences directly.
 
@@ -70,9 +70,9 @@ Figure \ref{fig:test_6_hist} is a pair of histograms showing all 1000 results of
 	\label{fig:test_6_hist}
 \end{figure}
 
-Unfortunately there is not much we can do with such low fidelities, so the rest of the results will focus on simpler Hamiltonians such as ones which occupy single K44s.  This means we cannot benchmark the \texttt{VESUVIUS} machine to any degree as was the initial plan since actual 3-SAT problems, even those as small as 6 problem variables, are too difficult for the machine to solve reliably.
+Unfortunately there is not much we can do with such low fidelities, so the rest of the results will focus on simpler Hamiltonians such as ones which occupy single K44s.  This means we cannot benchmark the \machine machine to any degree as was the initial plan since actual 3-SAT problems, even those as small as 6 problem variables, are too difficult for the machine to solve reliably.
 
-Having carried out these preliminary results, we have established a framework for evaluating the \texttt{VESUVIUS} machine: ascertain the cause of the large uncertainty in the short-time evolution results, using simpler Hamiltonians; measure the effect that number of spins has in a more fine grained manner; and check the intra-run results to see how much of an effect read noise has.
+Having carried out these preliminary results, we have established a framework for evaluating the \machine machine: ascertain the cause of the large uncertainty in the short-time evolution results, using simpler Hamiltonians; measure the effect that number of spins has in a more fine grained manner; and check the intra-run results to see how much of an effect read noise has.
 \begin{table}
 	\begin{center}
 \begin{tabular}{ | l | l | l | l |}
