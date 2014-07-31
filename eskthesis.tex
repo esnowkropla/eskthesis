@@ -1,4 +1,4 @@
-\documentclass[12pt]{dalthesis}
+\documentclass[12pt,glossary]{dalthesis}
 \usepackage{amsmath,graphicx,braket}
 
 \newcommand{\ham}{\mathcal{H}}
@@ -17,13 +17,20 @@
 
 \defencemonth{August}\defenceyear{2014}
 
+\supervisor{Dr. Kyriakidis}
+\reader{Dr. Labrie}
+\reader{Dr. Chapman}
+
 %\nolistoftables
 
 \frontmatter
 
 \begin{abstract}
-A method for compiling programs for adiabatic quantum computers is described, and the resulting programs evaluated on a physically implemented adiabatic quantum machine.  These results are used to characterize the performance of the machine.  The AQC machine is found to perform well on some problems with linear scaling with problem size for some instances, but it performs poorly on others and is unable to solve a 6-variable satisfiability problem at all.
+	A method for compiling programs for adiabatic quantum computers is described, and the resulting programs evaluated on a physically implemented adiabatic quantum machine.  These results are used to characterize the performance of the machine.  The AQC machine is found to perform well on some problems with linear scaling with problem size for some instances, but it performs poorly on others and is unable to solve a 6-variable satisfiability problem at all.
+\input{tex/glossary.tex}
 \end{abstract}
+
+\printglossary
 
 \begin{acknowledgements}
 	I would like to acknowledge the help of my numerous people whose assistance was invaluable in assembling this document, including my supervisor Jordan Kyriakidis, Todd Belote, Aaron Whiteway, Micah McCurdy and Jeff Egger.

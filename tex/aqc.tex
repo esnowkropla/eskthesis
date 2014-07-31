@@ -6,7 +6,7 @@ In this chapter we will explore the development of AQC as well as the physics of
 \section{A Brief History of AQC}
 The idea of expanding simulated annealing to include quantum effects to solve problems was initially introduced by Kadowaki and Nishimori.\cite{transverse}  The linking of quantum annealing to quantum computation was done slightly later by Farhi et. al in 2000.\cite{farhi}  The structure of AQC appears here entirely intact: evolving from easily prepared initial Hamiltonians into problem Hamiltonians via the adiabatic theorem.  Farhi et. al.\cite{farhi} lacks any experimental or theoretical arguments for the speed of AQC, or comparison to gate model quantum computing.  Farhi et. al. followed up with another paper\cite{farhi2} with some preliminary simulations of AQC carried out by numerically integrating Schr\"odinger's Equation.  These results seemed to indicate exponential speedup over classical algorithms for an NP-Complete problem, but due to the difficulty of simulating quantum mechanics on a classical computer the maximum problem size they could experiment with was quite small so they could not draw very broad conclusions.
 
-After this hopeful initial result it was shown by van Dam et. al.\cite{vandam} that, at least in principle, AQC is equivalent to gate model quantum computing.  Specifically they showed that adiabatic evolution taking time $T$ may be approximated by $O(T^2)$ unitary transformations of $n$ qubits.  However, van Dam et. al. also designed a class of minimization problems for which AQC has an exponential lower bound.  This was one of the earliest results in a controversy which continues to this day: how powerful are adiabatic quantum computers?  Proposed answers have included: being \emph{more} powerful than gate-model quantum computers, being able to solve NP-Complete problems efficiently;\cite{geordie}\cite{google} \emph{as} powerful as gate-model quantum computers;\cite{vandam} or no more powerful than classical computers.\cite{}  Care must be taken to distinguish the questions of how powerful adiabatic quantum \emph{computing} is, and how powerful a \emph{given} adiabatic quantum computer is.
+After this hopeful initial result it was shown by van Dam et. al.\cite{vandam} that, at least in principle, AQC is equivalent to gate model quantum computing.  Specifically they showed that adiabatic evolution taking time $T$ may be approximated by $O(T^2)$ unitary transformations of $n$ qubits.  However, van Dam et. al. also designed a class of minimization problems for which AQC has an exponential lower bound.  This was one of the earliest results in a controversy which continues to this day: how powerful are adiabatic quantum computers?  Proposed answers have included: being \emph{more} powerful than gate-model quantum computers, being able to solve NP-Complete problems efficiently;\cite{geordie}\cite{google} \emph{as} powerful as gate-model quantum computers;\cite{vandam} or no more powerful than classical computers.\cite{speedup}  Care must be taken to distinguish the questions of how powerful adiabatic quantum \emph{computing} is, and how powerful a \emph{given} adiabatic quantum computer is.
 
 More papers on this topic followed, including several from A. P. Young with others.\cite{young3}\cite{young2}\cite{young1}  Using Quantum Monte Carlo techniques, they were able to increase the size of analyzable Hamiltonians from 24 spins to 256 spins.\cite{young1}
 Their results seemed to indicate an exponential slowdown when solving a particular NP-Complete problem (Locked 1 in 3-SAT).\cite{young2}  This would suggest that an adiabatic quantum computer would \emph{not} be more powerful than a classical computer.
@@ -36,22 +36,57 @@ So if the speed at which the Hamiltonian changes (the derivative term) is slow e
 
 \section{Finding a Problem Hamiltonian}
 \label{sec:prob_ham}
-While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
+While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use N 2-spin particles with a Hamiltonian:
+
 \begin{equation}
 	\label{eq:ham}
 	\ham_f = \sum_i h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
 \end{equation}
-where $\sigma_i^Z$ is the z-pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  
+where $\sigma_i^Z$ is the z-pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian; using spin as our computational basis we choose logical 1 (\texttt{true}) to be represented by spin up $\ket{\uparrow}$ and logical 0 (\texttt{false}) by spin down $\ket{\downarrow}$.  We call the $h_i$ parameters fields and the $J_{ij}$'s couplings.  The parameters $h_i$ control the tendency of the ith particle to point up or down, while the $J_{ij}$'s control the tendency of the ith and jth particles to align or anti-align.
 
+For example, we can encode the logic of a digital \texttt{NAND} gate using the collection of $h_i$'s and $J_{ij}$'s shown in Table \ref{tab:couplings} (the procedure for generating this Hamiltonian is described in Section \ref{sec:lin_prog}). 
+
+\begin{table}
+	\begin{center}
+		\begin{tabular}{l l l}
+			\begin{tabular}{r r | l}
+				$A$ & $B$ & $C$ \\ \hline
+				0 & 0 & 1 \\
+				0 & 1 & 1 \\
+				1 & 0 & 1 \\
+				1 & 1 & 0 \\
+			\end{tabular} &			
+			\begin{tabular}{l | l}
+				Fields & Couplings \\ \hline
+				$h_A = -1$ & $J_{AB} = 1$ \\
+				$h_B = -1$ & $J_{AC} = 2$ \\
+				$h_C = -2$ & $J_{BC} = 2$ \\
+			\end{tabular} &
+			\begin{tabular}{r r r | l}
+				$A$ & $B$ & $C$ & Energy \\ \hline
+				$\downarrow$ & $\downarrow$ & $\downarrow$ & \ 9 \\
+				$\downarrow$ & $\downarrow$ & $\uparrow$ & -3 \\
+				$\downarrow$ & $\uparrow$ & $\downarrow$ & \ 1 \\
+				$\downarrow$ & $\uparrow$ & $\uparrow$ & -3 \\
+				$\uparrow$ & $\downarrow$ & $\downarrow$ & \ 1 \\
+				$\uparrow$ & $\downarrow$ & $\uparrow$ & -3 \\
+				$\uparrow$ & $\uparrow$ & $\downarrow$ & -3 \\
+				$\uparrow$ & $\uparrow$ & $\uparrow$ & \ 1 \\
+			\end{tabular}
+		\end{tabular}
+	\end{center}
+	\caption[\texttt{NAND} Gate Fields and Couplings]{From left to right the truth table of the logical \texttt{NAND}; the fields and couplings that result in a Hamiltonian satisfying that truth table; the complete energy structure of that Hamiltonian.  Each state of the spins ($\uparrow/\downarrow$) whose logical equivalent appears in the truth table is part of the degenerate ground state of the final system.}
+	\label{tab:couplings}
+\end{table}
 
 
 \begin{figure}
 	\begin{center}
-	\scalebox{0.5}{
-		\includegraphics{img/nand.eps}
-	}
-\end{center}
-	\caption[\texttt{NAND} Graph]{Graphical representation of the Hamiltonian implementing the logic of a \texttt{NAND} gate.  Each of the vertices is a spin and the number inside is the field value on that spin; each edge is the coupling value between the respective vertices.  The top two spins are the input spins, while the bottom is the output.  Each ground state of this Hamiltonian enforces the logic $C = \neg(A \wedge B)$.}
+			\scalebox{0.5}{
+				\includegraphics{img/nand.eps}
+			} 
+	\end{center}
+	\caption[\texttt{NAND} Graph]{Graphical representation of the Hamiltonian implementing the logic of a \texttt{NAND} gate.  Each of the vertices is a spin and the number inside is the field value on that spin; each edge is the coupling value between the respective vertices.  Each ground state of this Hamiltonian enforces the logic $C = \neg(A \wedge B)$.}
 	\label{fig:nand_graph}
 \end{figure}
 
@@ -89,10 +124,10 @@ However, in this work we restrict ourselves to evaluating straight line paths th
 For small Hamiltonian we can simulate directly the process of quantum annealing by integrating the Schr\"odinger equation. For time dependent Hamiltonians such as ours, the general form of the Schr\"odinger equation is 
 
 \begin{equation}
-	i\hbar\frac{\partial}{\partial t} \ket{\psi} = \ham\ket{\psi}
+	i\hbar\frac{\partial}{\partial t} \ket{\psi(t)} = \ham\ket{\psi(t)}
 \end{equation}
 
-this is a system of linear partial differential equations which can be easily solved by numerical methods.  Using a fourth order Runge-Kutta method\cite{comp_book} we can find the overlap between the ground state $\ket{\psi_f}$ and the current state $\ket{\psi(t)}$ and plot this as a function of the annealing parameter.  Figure \ref{fig:simulate} shows the results of one such simulation.  This shows an eight spin Hamiltonian annealed with linear control parameters $A(t) = 1-t/T$ and $B(t) = t/T$.  The features correspond to what we expect from the adiabatic theorem: the fidelity starts low and climbs as the system evolves.  It does not reach one as we are not in the adiabatic limit because we are annealing for only a finite time.  We expect to see similar results to the one shown here from experimental data; deviations will show us how far our experiments depart from the assumptions of AQC.
+this is a system of linear ordinary differential equations which can be easily solved by numerical methods.  Using a fourth order Runge-Kutta method\cite{comp_book} we can find the overlap between the ground state $\ket{\psi_f}$ and the current state $\ket{\psi(t)}$ and plot this as a function of the annealing parameter.  Figure \ref{fig:simulate} shows the results of one such simulation.  This shows an eight spin Hamiltonian annealed with linear control parameters $A(t) = 1-t/T$ and $B(t) = t/T$.  The features correspond to what we expect from the adiabatic theorem: the fidelity starts low and climbs as the system evolves.  It does not reach one as we are not in the adiabatic limit because we are annealing for only a finite time.  We expect to see similar results to the one shown here from experimental data; deviations will show us how far our experiments depart from the assumptions of AQC.
 \begin{figure}
 	\includegraphics{img/simulate.eps}
 	\caption[Simulated AQC]{Numerical simulation of adiabatic evolution by integrating the Schr\"odinger equation.}
