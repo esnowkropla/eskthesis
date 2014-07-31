@@ -39,14 +39,11 @@ So if the speed at which the Hamiltonian changes (the derivative term) is slow e
 While in principle there are an unlimited number of ways to construct a Hamiltonian whose ground state encodes the solution to a computation, our method is to use an N-particle Hamiltonian of the form
 \begin{equation}
 	\label{eq:ham}
-	\ham_f = \sum_{i} h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
+	\ham_f = \sum_i h_i \sigma_i^Z + \sum_{i < j} J_{ij} \sigma_i^Z\sigma_j^Z 
 \end{equation}
 where $\sigma_i^Z$ is the z-pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian.  
-This 2-local Hamiltonian corresponds to a graph structure, where each particle is a vertex and each non-zero $J_{ij}$ is an edge, while non-zero $h_i$s can be represented as edges to a constant ``field'' spin.
 
-Our problem of finding a suitable Hamiltonian is now reduced to finding a set of $h$'s and $J_{ij}$'s such that our desired solution is encoded in the ground state.  This process is called \emph{embedding} and will be described in more detail in Chapter \ref{chap:embed}.  Something very useful in this process is the \emph{gluing theorem}; this theorem states that if we take two Hamiltonians $G$ and $V$ and combine their fields and couplings, the resulting Hamiltonian's ground states are the combination of the ground states of $G$ and $V$.  This allows us to build up larger Hamiltonians out of smaller sub-pieces, such as building an N-bit adder circuit out of adders and half-adders.
 
-Figure \ref{fig:nand_graph} shows a Hamiltonian graph describing the $h_i$'s and $J_{ij}$'s to encode the logic of a NAND gate.  Because NAND's are universal for classical computation, combining this graph with the gluing theorem allows us to encode the evaluation of any computable function into the ground state of a Hamiltonian of the general form described in Equation \ref{eq:ham}.
 
 \begin{figure}
 	\begin{center}
@@ -58,13 +55,7 @@ Figure \ref{fig:nand_graph} shows a Hamiltonian graph describing the $h_i$'s and
 	\label{fig:nand_graph}
 \end{figure}
 
-Simply evaluating the Hamiltonian depicted in Figure \ref{fig:nand_graph} will reproduce the entire truth table of the \texttt{NAND} gate.  Usually computing the entire truth table of our circuit is not what we want; we want to specify some input and get only the corresponding output.  This is done by a process called \emph{clamping}.  
 
-Clamping manipulates a Hamiltonian to mimic the effect of fixing certain spins to specified values.  This is done in several steps.  First, we select a value $C$ for the spin $s$ to be clamped to.  $s$ is then removed from the Hamiltonian; each coupling between $s$ and a different spin $d$ is removed, and the value $Cs$ is added to the field on spin $d$.  This changes the energy spectrum associated with spin $d$ to match what it would be were $s$ still in the Hamiltonian with the value $C$.
-
-For example, in the \texttt{NAND} Hamiltonian from Figure \ref{fig:nand_graph}, clamping the spin $C$ to $+1$ or $true$  would result in the field terms on $A$ and $B$ becoming $-1 + 1\times2 = 1$.  The final Hamiltonian would then be fields of $+1$ on spins $A$ and $B$ and a coupling between them also with strength $+1$, while $C$ would be gone.  The ground state energy of this Hamiltonian is $-1$, with three ground states corresponding to either spin $A$ or $B$ up with the other down, or both spins down.  The only state of the two spins not in the ground state degeneracy is the state $A = B = \uparrow$; this is the only input to a \texttt{NAND} gate that does not result in a \texttt{true} output, and we restricted this Hamiltonian to values of $A$ and $B$ for which $C$ is \texttt{true}.
-
-The notable feature of this example is that we clamped what is normally an \emph{output} spin.  Because quantum mechanics is reversible, all of our computations must be as well; this means AQC Hamiltonians are symmetric between input and output.  We take advantage of this when designing our circuits: any circuit that computes a function $f$ also computes its inverse $f^{-1}$.  Thus a circuit that computes multiplication is also a circuit that computes integer factorization, depending on whether the spins corresponding to the factors or the multiplicand are clamped.  Since we can construct a classical multiplication circuit out of a polynomial number of \texttt{NAND} gates, we can also construct an AQC integer factorization circuit out of a polynomial number of quantum \texttt{NAND} gates.
 
 \section{Adiabatic Evolution}
 Once we have a Hamiltonian whose ground state encodes the problem we would like to solve, we need to set up the evolution.  The Adiabatic Theorem lets us transition from the ground state of one Hamiltonian to another, so we need an initial Hamiltonian.  In general almost any Hamiltonian of which we know the ground state will work.  For simplicity we use the following initial Hamiltonian:
