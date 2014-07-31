@@ -2,3 +2,34 @@
 \chapter{The Adiabatic Theorem}
 \label{apx:aqc}
 
+We derive a perturbative version of the adiabatic theorem here following Zettili\cite{zettili}.  For more on the validity of the adiabatic theorem including its use outside of the perturbative regime see Amin\cite{amin}.
+
+Using time dependent perturbation theory, we find the transition probability $P_{if}(t)$ from state $\ket{\psi_i}$ to state $\ket{\psi_f}$ is (to first order)\cite{townsend}
+
+\begin{equation}
+	P_{if}(t) = \left|-\frac{i}{\hbar}\int_0^t \braket{\psi_f|\hat{V}(t')|\psi_f}e^{i\omega_{fi}t'}\mathrm{d}t'\right|^2
+\end{equation}
+
+where $\hat{V}(t)$ is the time dependent perturbative part of the Hamiltonian, $\omega_{fi} = \frac{E_f - E_i}{\hbar}$.  We can recast this into a form with explicit dependence on the time derivative of $\hat{V}(t)$ using the fact that $e^{i\omega_{fi}t} = (1/i\omega_{fi})\partial e^{i\omega_{fi}t}/\partial t$, and then integrating by parts to get
+
+\begin{align}
+	P_{if}(t) &= \left.-\frac{1}{\hbar\omega{fi}}\braket{\psi_f | \hat{V}(t) | \psi_i} e^{i\omega_{fi}t} \right|_{t=0}^t + \frac{1}{\hbar\omega_{fi}} \int_0^t e^{i\omega_{fi}t'} \left( \frac{\partial}{\partial t'} \braket{\psi_f | \hat{V}(t') | \psi_i } \right) \mathrm{d} t' \notag\\
+	&= \frac{1}{\hbar\omega_{fi}} \int_0^t e^{i\omega_{fi}t'} \left( \frac{\partial}{\partial t'} \braket{\psi_f | \hat{V}(t') | \psi_i} \right) \mathrm{d}t'
+\end{align}
+
+where we assume $\hat{V}$ is turned on and then off again and thus vanishes at the limits.
+
+If we assume that the speed at which $\hat{V}$ is changing is very small, then the derivative term $\partial\braket{\psi_f | \hat{V}(t') | \psi_i}/\partial \mathrm{d}t'$ will be almost constant over the integral, and we can pull it out giving a transition probability of 
+
+\begin{align}
+	P_{if}(t) &\approx \frac{1}{\hbar^2\omega_{fi}^2} \left| \frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | psi_i} \right|^2 \left| \int_0^t e^{i\omega_{fi}t'} \mathrm{d}t' \right|^2 \notag\\
+	&\approx \frac{4}{\hbar^2\omega_{fi}^4} \left| \frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right|^2 \sin^2\left(\frac{\omega_{fi}t}{2}\right)
+\end{align}
+
+In the adiabatic limit this transition probability goes to zero (or alternatively, the adiabatic limit is defined as when this transition probability goes to zero).  In that case we have $\sin^2(x) << 1$ and we arrive at the adiabatic condition:
+
+\begin{equation}
+	\left| \hbar \frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right| << \Delta^2
+\end{equation}
+
+where $\Delta$, the energy gap, is defined as $\Delta = |E_f - E_i|$.
