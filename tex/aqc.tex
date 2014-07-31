@@ -1,7 +1,7 @@
 \chapter{Adiabatic Quantum Computing}
 \label{chap:aqc}
 
-In this chapter we will explore the development of AQC as well as the physics of how the adiabatic theorem works.  We then discuss how adiabatic quantum computing works, and conduct a numerical simulation of an adiabatic quantum computation.
+In this chapter we will explore the development of AQC as well as the physics of the adiabatic theorem.  We then discuss how adiabatic quantum computing works, and conduct a numerical simulation of an adiabatic quantum computation.
 
 \section{A Brief History of AQC}
 The idea of expanding simulated annealing to include quantum effects to solve problems was initially introduced by Kadowaki and Nishimori.\cite{transverse}  The linking of quantum annealing to quantum computation was done slightly later by Farhi et. al in 2000.\cite{farhi}  The structure of AQC appears here entirely intact: evolving from easily prepared initial Hamiltonians into problem Hamiltonians via the adiabatic theorem.  Farhi et. al.\cite{farhi} lacks any experimental or theoretical arguments for the speed of AQC, or comparison to gate model quantum computing.  Farhi et. al. followed up with another paper\cite{farhi2} with some preliminary simulations of AQC carried out by numerically integrating Schr\"odinger's Equation.  These results seemed to indicate exponential speedup over classical algorithms for an NP-Complete problem, but due to the difficulty of simulating quantum mechanics on a classical computer the maximum problem size they could experiment with was quite small so they could not draw very broad conclusions.
@@ -23,16 +23,16 @@ By starting the system in an easy to prepare state (for example, if your system 
 The adiabatic theorem states that if a system is initially prepared in the ith energy level $\ket{\psi_i}$, and the Hamiltonian is evolved according to the adiabatic condition, the system will remain in the ith state after the evolution.  The adiabatic condition is:
 
 \begin{equation}
-	\left | \frac{1}{\omega_{fi}}\frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right | << |E_f - E_i|
+	\left | \hbar\frac{\partial}{\partial t} \braket{\psi_f | \hat{V}(t) | \psi_i} \right | << \Delta^2
 \end{equation}
 
-where $E_i$ and $E_f$ are the energies of the initial and final states $\ket{\psi_i}$ and $\ket{\psi_f}$, $\hat{V}(t)$ is the time dependant part of the Hamiltonian and $\omega_{if} = \frac{E_f - E_i}{\hbar}$.  For a derivation of the adiabatic theorem see Appendix \ref{apx:aqc}.\cite{zettili}  When the adiabatic condition is satisfied the probability of transition from state $i$ to state $f$ is zero, that is
+where the energy gap between states $\ket{\psi_i}$ and $\ket{\psi_f}$ is $\Delta = |E_f - E_i|$ and $\hat{V}(t)$ is the time dependant part of the Hamiltonian.  For a derivation of the adiabatic theorem see Appendix \ref{apx:aqc}.  When the adiabatic condition is satisfied the probability of transition from state $i$ to state $f$ is zero, that is
 
 \begin{equation}
 	|\braket{\psi_f|\psi_i}|^2 \rightarrow 1
 \end{equation}
 
-So if the speed at which the Hamiltonian changes (the derivative term) is slow enough, and the gap $\Delta$ between the initial state and the other states ($\Delta = E_f - E_i$) is large enough, then the system won't transition into a new state.  
+So if the speed at which the Hamiltonian changes (the derivative term) is slow enough, and the gap $\Delta$ between the initial state and the other states is large enough, then the system won't transition into a new state.
 
 \section{Finding a Problem Hamiltonian}
 \label{sec:prob_ham}
@@ -44,7 +44,7 @@ While in principle there are an unlimited number of ways to construct a Hamilton
 \end{equation}
 where $\sigma_i^Z$ is the z-pauli matrix of the ith particle and $h_i$ and $J_{ij}$ are the parameters of the Hamiltonian; using spin as our computational basis we choose logical 1 (\texttt{true}) to be represented by spin up $\ket{\uparrow}$ (or $s = +1$) and logical 0 (\texttt{false}) by spin down $\ket{\downarrow}$ (or $s = -1$).  We call the $h_i$ parameters fields and the $J_{ij}$'s couplings.  The parameters $h_i$ control the tendency of the ith particle to point up or down, while the $J_{ij}$'s control the tendency of the ith and jth particles to align or anti-align.
 
-We can find the energy of a state by multiplying each $h_i$ by the corresponding spin $s_i = \pm 1$ and each $J$ by the corresponding pair of spins $s_i$ and $s_j$.  Choosing a problem Hamiltonian is then the problem of finding the $h$s and $J$s so that the ground state corresponds to the problem we are trying to solve.  For example, we can encode the logic of a digital \texttt{NAND} gate using the collection of $h_i$'s and $J_{ij}$'s shown in Table \ref{tab:couplings} (the procedure for generating this Hamiltonian is described in Section \ref{sec:lin_prog}). 
+We can find the energy of a state by multiplying each $h_i$ by the corresponding spin $s_i = \pm 1$ and each $J$ by the corresponding pair of spins $s_i$ and $s_j$.  Choosing a problem Hamiltonian is then the problem of finding the $h$s and $J$s so that the ground state corresponds to the problem we are trying to solve.  For example, we can encode the logic of a digital \texttt{NAND} gate using the collection of $h_i$'s and $J_{ij}$'s shown in Table \ref{tab:couplings} (the procedure for generating this Hamiltonian is described in Section \ref{sec:lin_prog}).  There are four degenerate ground states of this Hamiltonian, each corresponding to one of the entries in the logic table for a \texttt{NAND} gate.
 
 \begin{table}
 	\begin{center}
@@ -106,13 +106,13 @@ Once we've assembled both our initial and final Hamiltonians, we can conduct the
 
 where $A(t)$ and $B(t)$ are dimensionless functions of time such that $A(0) = B(T) = 1$ and $A(T) = B(0) = 0$ where $T$ is the final annealing time; this ensures that at $t = 0$ the Hamiltonian is equal to $H_i$ and at $t = T$ the Hamiltonian is equal to $H_f$.  Then the functions $A$ and $B$ describe the \emph{evolution path}.  Combining the evolution path with the speed at which the Hamiltonian is changing (or just the speed), that is $\frac{\partial A}{\partial t}$ and $\frac{\partial B}{\partial t}$, gives us the evolution trajectory.  
 
-Given a ground state of $\ham_{tot}$, $\ket{\psi_{gs}}$, the \emph{fidelity} ($\fid$) is the probability of measuring $\psi_{gs}$, or $|\braket{\psi(T)|\psi_{gs}}|^2$.  If there are $N$ correct answer to our computation, and thus $\ket{\psi_N}$ degenerate ground states, the fidelity is defined as
+Given a ground state $\ket{psi_{gs}}$ of $\ham_{tot}$, the \emph{fidelity} ($\fid$) is the probability of measuring (after an anneal time $T$) $\psi_{gs}$, or $|\braket{\psi(T)|\psi_{gs}}|^2$.  If there are $N$ correct answer to our computation, and thus $\ket{\psi_N}$ degenerate ground states, the fidelity is defined as
 
 \begin{equation}
 	\fid = \sum_{i=0}^N \braket{\psi(T)|\psi_i}
 \end{equation}
 
-For a perfectly annealed system, the fidelity should go to one as the annealing time increases.  Since any real annealing will not be in the infinite anneal time limit, in practice our fidelity values are restricted to be $\leq 1$.  The closer the fidelity is to 1, the more likely our computation is to succeed.  We will use the fidelity later in the experimental results section to evaluate how close we get to ideal AQC.
+For a perfectly annealed system, the fidelity should go to one as the annealing time increases.  Since any real annealing will not be in the infinite anneal time limit, in practice our fidelity values are restricted to be $\leq 1$.  Hence AQC is fundamentally a probabilistic process.  The closer the fidelity is to 1, the more likely our computation is to succeed.  We will use the fidelity later in the experimental results section to evaluate how close we get to ideal AQC.
 
 For a purely quantum mechanical system described by the Hamiltonian $\ham_{tot}$, the evolution trajectory completely determines the fidelity.
 The simplest and most obvious trajectory is $A(t) = 1 - t/T$ and $B(t) = t/T$ at a constant speed, or a straight line path through Hamiltonian space.
@@ -125,9 +125,26 @@ For small Hamiltonian we can simulate directly the process of quantum annealing 
 
 \begin{equation}
 	i\hbar\frac{\partial}{\partial t} \ket{\psi(t)} = \ham\ket{\psi(t)}
+	\label{eq:num_int}
 \end{equation}
 
-this is a system of linear ordinary differential equations which can be easily solved by numerical methods.  Using a fourth order Runge-Kutta method\cite{comp_book} we can find the overlap between the ground state $\ket{\psi_f}$ and the current state $\ket{\psi(t)}$ and plot this as a function of the annealing parameter.  Figure \ref{fig:simulate} shows the results of one such simulation.  This shows an eight spin Hamiltonian annealed with linear control parameters $A(t) = 1-t/T$ and $B(t) = t/T$.  The features correspond to what we expect from the adiabatic theorem: the fidelity starts low and climbs as the system evolves.  It does not reach one as we are not in the adiabatic limit because we are annealing for only a finite time.  We expect to see similar results to the one shown here from experimental data; deviations will show us how far our experiments depart from the assumptions of AQC.
+this is a system of linear ordinary differential equations which can be solved by numerical methods.  Using a fourth order Runge-Kutta method\cite{comp_book} we can find the overlap between the ground state $\ket{\psi_f}$ and the current state $\ket{\psi(t)}$ and plot this as a function of the annealing parameter.  We anneal an eight spin Hamiltonian (``k44\_and'', see Table \ref{tab:k44_and}) with linear control parameters $A(t) = 1-t/T$ and $B(t) = t/T$.  The state vector $\ket{\psi(t)}$ is written as a superposition over all the possible states
+\begin{equation}
+	\ket{\psi(t)} = \sum_{i=0}^{2^8-1} c_i(t)\ket{i}
+\end{equation}
+
+where $\ket{i}$ is a shorthand for 
+
+\begin{align}
+	\ket{0} &= \ket{\uparrow\uparrow\uparrow\uparrow\uparrow\uparrow\uparrow\uparrow}\notag\\
+	\ket{1} &= \ket{\uparrow\uparrow\uparrow\uparrow\uparrow\uparrow\uparrow\downarrow}\notag\\
+			& \vdots\notag\\
+	\ket{255} &= \ket{\downarrow\downarrow\downarrow\downarrow\downarrow\downarrow\downarrow\downarrow}
+\end{align}
+
+where each $c_i(0) = 1/16$ (that is, an equal superposition) and we solve for all of the $c_i(t)$s using Equation \ref{eq:num_int} to generate each time step $c_i(t + \Delta t)$
+
+Figure \ref{fig:simulate} shows the results of this simulation.  The features correspond to what we expect from the adiabatic theorem: the fidelity starts low and climbs as the system evolves.  It does not reach one as we are not in the adiabatic limit because we are annealing for only a finite time.  We expect to see similar results to the one shown here from experimental data; deviations will show us how far our experiments depart from the assumptions of AQC.
 \begin{figure}
 	\includegraphics{img/simulate.eps}
 	\caption[Simulated AQC]{Numerical simulation of adiabatic evolution by integrating the Schr\"odinger equation.}
