@@ -8,7 +8,7 @@ help:
 
 .PHONY: all
 
-all:
+all: glossary
 	latex $(THESIS_NAME).tex
 	latex $(THESIS_NAME).tex
 	bibtex $(THESIS_NAME)
@@ -19,7 +19,7 @@ all:
 body:
 	latex $(THESIS_NAME).tex
 
-glossary:
+glossary: tex/glossary.tex
 	latex $(THESIS_NAME).tex
 	makeindex -s $(THESIS_NAME) -o $(THESIS_NAME).gls $(THESIS_NAME).glo
 
