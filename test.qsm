@@ -1,0 +1,3 @@
+(and (x1 ~x2) (aux))
+(and (aux x3) (output))
+(clamp ((output +1)))

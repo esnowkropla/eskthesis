@@ -90,7 +90,19 @@ We can find the energy of a state by multiplying each $h_i$ by the corresponding
 	\label{fig:nand_graph}
 \end{figure}
 
+Most of the time we don't want to calculate the whole truth table of a circuit, merely a subsection of it with some variables fixed.  To do this we fix the variables we don't wish to solve for and adjust each of their neighbour's fields by the amount contributed by the couplings shared with the fixed variables.  For example, if we had a Hamiltonian 
 
+\begin{center}
+\begin{tabular}{ | l | l | l | l |}
+	\hline
+	\multicolumn{4}{|c|}{Clamping Hamiltonian} \\ \hline
+	\multicolumn{2}{|c|}{Fields} & \multicolumn{2}{c|}{Couplings} \\ \hline
+	$A$ & 1.0 & $A,B$ & -1.0 \\
+	$B$ & 1.0 &  &  \\ \hline
+\end{tabular}
+\end{center}
+
+and we wanted to clamp $B$ to -1, we would remove $B$ from the Hamiltonian and the final result would be a field on $A$ with magnitude 2.
 
 \section{Adiabatic Evolution}
 Once we have a Hamiltonian whose ground state encodes the problem we would like to solve, we need to set up the evolution.  The Adiabatic Theorem lets us transition from the ground state of one Hamiltonian to another, so we need an initial Hamiltonian.  In general almost any Hamiltonian of which we know the ground state will work.  For simplicity we use the following initial Hamiltonian:
