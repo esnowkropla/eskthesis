@@ -1,6 +1,6 @@
 \chapter{Embedding}
 \label{chap:embed}
-In this chapter we will cover the various processes by which we go from general Hamiltonians like the ones from Chapter 
+In this chapter we will cover the various processes by which we go from general Hamiltonians like the ones from Chapter \ref{chap:aqc} to Hamiltonians which will fit on the \machine as described in Chapter \ref{chap:machine}.
 
 \section{Creating Problem Hamiltonians}
 Embedding is the name we give to the general process of translating a computational problem into something which is ready for an adiabatic quantum computer to evaluate.  As mentioned in Section \ref{sec:prob_ham}, the first step is to generate a problem Hamiltonian.  We employ two methods for finding suitable problem Hamiltonians.  The first, using linear programming, is suitable for small Hamiltonians (generally only a few variables in size).  The second is to use the software \texttt{QCC} which takes advantage of the gluing theorem to stitch together a problem Hamiltonian out of smaller sub-Hamiltonians.
@@ -35,7 +35,7 @@ To use linear programming to create a problem Hamiltonian with N spins we first 
 		 & \mathrm{etc.} \nonumber
 \end{align}
 
-In each constraint we also add the variables representing couplings; the sign of each coupling variable should be the product of the two variables that represent the two spins the coupling connects.  Now for each state which we want to be part of the ground state we set the value of the constraint equal to $k$; for each state that is \emph{not} part of the ground state, we enforce that the corresponding constraint is strictly greater than $K$.  
+In each constraint we also add the variables representing couplings; the sign of each coupling variable should be the product of the two variables that represent the two spins the coupling connects.  Now for each state which we want to be part of the ground state we set the value of the constraint equal to $k$; for each state that is \emph{not} part of the ground state, we enforce that the corresponding constraint is strictly greater than $k$.  
 
 For example, if we know the truth table for a \texttt{NAND} gate and want to find a set of fields and couplings that create a matching Hamiltonian, the constraints would be
 
@@ -53,10 +53,10 @@ For example, if we know the truth table for a \texttt{NAND} gate and want to fin
 For all three spin gates the constraints would be identical except for which states are $k = 0$ and which are $k \ge 1$.  This particular set of constraints will produce a \texttt{NAND} gate; each of the variables $x_0, x_1, x_2$ in the constraint equal to zero matches the truth table (see Table \ref{tab:couplings}) for \texttt{AND} with input variables $x_0, x_1$ and output variable $x_2$.
 
 The combined effect of all of these constraints is that when we solve the system for the set of variables $x_i$ which minimize the objective function, states which encode the desired logic will have an energy of $-k$ and states which do not encode the desired logic will have an energy greater than $-k$.
-This is a slightly unusual use for LP; normally the finding the set of $x_i$'s that optimize the objective function is the goal, but for us finding the $x_i$'s which satisfy the constraints if the central objective.
+This is a slightly unusual use for LP; normally finding the set of $x_i$'s that optimize the objective function is the goal, but for us finding the $x_i$'s which satisfy the constraints if the central objective.
 Minimizing the sum of the coupling values simply helps to keep the number of different coupling values small and the spread between them down.  This will be important because physical adiabatic quantum computers can only implement a finite number of different coupling values in finite ranges. 
 
-Unfortunately while this method allows us to find a set of couplings to encode the logic of any circuit, we require a constraint for each possible state of each of the variables.  For a binary circuit with $n$ variables, this is $2^n$ states.
+Unfortunately while this method allows us to find a set of couplings to encode the logic of any circuit, we require a constraint for each possible state of each of the variables.  For a binary circuit with $n$ variables, there are $2^n$ states.
 The above process for creating problem Hamiltonians is thus clearly exponentially hard, and becomes extremely computationally inefficient for larger circuit sizes.
 That said, this method retains utility for finding small sub-Hamiltonians to use as building blocks for larger problem Hamiltonians using \texttt{QCC} as described in the next section.
 
@@ -79,13 +79,13 @@ The above clamp statement sets the value of the variables \texttt{a} and \texttt
 A complete \texttt{QSM} file might then look like
 
 \begin{center}
-	\texttt{(and (a $\sim$b) (c))}\\
-	\texttt{(or (x y) (b))}\\
-	\texttt{(clamp ((c +1)))}
+	\texttt{(and (A $\sim$A) (C))}\\
+	\texttt{(or (X Y) (B))}\\
+	\texttt{(clamp ((C +1)))}
 \end{center}
-which would compile to a Hamiltonian which encodes the logic $a \wedge \neg b = c, x \vee y = b, c = \text{TRUE}$ and the resulting ground states will be those states for which the logic is satisfied.
+which would compile to a Hamiltonian which encodes the logic $A \wedge \neg B = C, X \vee Y = B, C = \text{TRUE}$ and the resulting ground states will be those states for which the logic is satisfied.
 
-Figure \ref{fig:eg_embed} shows the shape of the resulting graph.  The node for $c$ is greyed out to represent the fact that it is clamped.  Each of the input sub-Hamiltonians (\texttt{and} and \texttt{or}) connect each of the spins they're given, and the resulting shape has node $b$ connected to every other node, $x$ and $y$ connected to each other, and $a$ only connected to $b$.  This Hamiltonian graph does not have the same shape as the \machine graph, and so will have to be embedded in the following section.
+Figure \ref{fig:eg_embed} shows the shape of the resulting graph.  The node for $c$ is greyed out to represent the fact that it is clamped.  Each of the input sub-Hamiltonians (\texttt{and} and \texttt{or}) connect each of the spins they're given, and the resulting shape has node $B$ connected to every other node, $X$ and $Y$ connected to each other, and $A$ only connected to $B$.  This Hamiltonian graph does not have the same shape as the \machine graph, and so will have to be embedded in the following section.
 
 \begin{figure}
 	\begin{center}
@@ -139,4 +139,4 @@ We also define a \emph{clone coupling} value which is as large as possible and f
 
 Each term in $V$, both fields and couplings, should now have a corresponding term in $G$.  $G$ should also contain many coupling terms that group the necessary clone maps.  
 
-This algorithm is tailored AQC machines whose qubits are arranged in a square shape (specifically the shape of the \machine), however, the principle should be generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead by allocating the input graph spins along the diagonal.
+This algorithm is tailored to AQC machines whose qubits are arranged in a square shape (specifically the shape of the \machine), however, the principle should be generalizable: as mentioned above any reasonably compact graph with constant connectivity should be able to embed a complete graph with an $n^2$ overhead by allocating the input graph spins along the diagonal.

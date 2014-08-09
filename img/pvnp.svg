@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="540"
+   height="360"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="pvnp.eps">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="157.36884"
+     inkscape:cy="234.40641"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     units="in"
+     inkscape:window-width="1545"
+     inkscape:window-height="876"
+     inkscape:window-x="55"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-692.35975)">
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;stroke:#000000;stroke-opacity:1"
+       id="path3051"
+       sodipodi:cx="270.71429"
+       sodipodi:cy="188.21428"
+       sodipodi:rx="125.71429"
+       sodipodi:ry="132.5"
+       d="m 396.42858,188.21428 a 125.71429,132.5 0 1 1 -251.42857,0 125.71429,132.5 0 1 1 251.42857,0 z"
+       transform="translate(0,692.35975)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;stroke:#000000;stroke-opacity:1"
+       id="path3053"
+       sodipodi:cx="252.14285"
+       sodipodi:cy="240"
+       sodipodi:rx="107.85714"
+       sodipodi:ry="60"
+       d="m 359.99999,240 a 107.85714,60 0 1 1 -215.71428,0 107.85714,60 0 1 1 215.71428,0 z"
+       transform="matrix(0.83484824,0,0,0.99478665,60.213278,715.39667)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;stroke:#000000;stroke-opacity:1"
+       id="path3055"
+       sodipodi:cx="317.85715"
+       sodipodi:cy="92.5"
+       sodipodi:rx="90"
+       sodipodi:ry="28.928572"
+       d="m 407.85715,92.5 a 90,28.928572 0 1 1 -180,0 90,28.928572 0 1 1 180,0 z"
+       transform="matrix(0.8876205,0,0,1.6997576,-11.422226,640.13216)" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3057"
+       style="font-size:18px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(0,692.35975)"><flowRegion
+         id="flowRegion3059"><rect
+           id="rect3061"
+           width="103.57143"
+           height="61.42857"
+           x="215.71428"
+           y="73.571426"
+           style="font-size:18px" /></flowRegion><flowPara
+         id="flowPara3063" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3065"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(198.57143,746.64546)"><flowRegion
+         id="flowRegion3067"><rect
+           id="rect3069"
+           width="80"
+           height="60.714287"
+           x="32.857143"
+           y="40" /></flowRegion><flowPara
+         id="flowPara3071">NP-Complete</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3073"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(4.2857143,697.35975)"><flowRegion
+         id="flowRegion3075"><rect
+           id="rect3077"
+           width="87.85714"
+           height="42.857143"
+           x="260.71429"
+           y="248.57143" /></flowRegion><flowPara
+         id="flowPara3079">P</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3081"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(15.714286,698.78832)"><flowRegion
+         id="flowRegion3083"><rect
+           id="rect3085"
+           width="165.71428"
+           height="35.714287"
+           x="155.71428"
+           y="153.57143" /></flowRegion><flowPara
+         id="flowPara3087">NP</flowPara></flowRoot>  </g>
+</svg>

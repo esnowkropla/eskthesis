@@ -6,7 +6,7 @@ In this chapter we will explore the development of AQC as well as the physics of
 \section{A Brief History of AQC}
 The idea of expanding simulated annealing to include quantum effects to solve problems was initially introduced by Kadowaki and Nishimori.\cite{transverse}  The linking of quantum annealing to quantum computation was done slightly later by Farhi et. al in 2000.\cite{farhi}  The structure of AQC appears here entirely intact: evolving from easily prepared initial Hamiltonians into problem Hamiltonians via the adiabatic theorem.  Farhi et. al.\cite{farhi} lacks any experimental or theoretical arguments for the speed of AQC, or comparison to gate model quantum computing.  Farhi et. al. followed up with another paper\cite{farhi2} with some preliminary simulations of AQC carried out by numerically integrating Schr\"odinger's Equation.  These results seemed to indicate exponential speedup over classical algorithms for an NP-Complete problem, but due to the difficulty of simulating quantum mechanics on a classical computer the maximum problem size they could experiment with was quite small so they could not draw very broad conclusions.
 
-After this hopeful initial result it was shown by van Dam et. al.\cite{vandam} that, at least in principle, AQC is equivalent to gate model quantum computing.  Specifically they showed that adiabatic evolution taking time $T$ may be approximated by $O(T^2)$ unitary transformations of $n$ qubits.  However, van Dam et. al. also designed a class of minimization problems for which AQC has an exponential lower bound.  This was one of the earliest results in a controversy which continues to this day: how powerful are adiabatic quantum computers?  Proposed answers have included: being \emph{more} powerful than gate-model quantum computers, being able to solve NP-Complete problems efficiently;\cite{geordie}\cite{google} \emph{as} powerful as gate-model quantum computers;\cite{vandam} or no more powerful than classical computers.\cite{speedup}  Care must be taken to distinguish the questions of how powerful adiabatic quantum \emph{computing} is, and how powerful a \emph{given} adiabatic quantum computer is.
+After this encouraging initial result it was shown by van Dam et. al.\cite{vandam} that, at least in principle, AQC is equivalent to gate model quantum computing.  Specifically they showed that adiabatic evolution taking time $T$ may be approximated by $O(T^2)$ unitary transformations of $n$ qubits.  However, van Dam et. al. also designed a class of minimization problems for which AQC has an exponential lower bound.  This was one of the earliest results in a controversy which continues to this day: how powerful are adiabatic quantum computers?  Proposed answers have included: being \emph{more} powerful than gate-model quantum computers, being able to solve NP-Complete problems efficiently;\cite{geordie}\cite{google} \emph{as} powerful as gate-model quantum computers;\cite{vandam} or no more powerful than classical computers.\cite{speedup}  Care must be taken to distinguish the questions of how powerful adiabatic quantum \emph{computing} is, and how powerful a \emph{given} adiabatic quantum computer is.
 
 More papers on this topic followed, including several from A. P. Young with others.\cite{young3}\cite{young2}\cite{young1}  Using Quantum Monte Carlo techniques, they were able to increase the size of analyzable Hamiltonians from 24 spins to 256 spins.\cite{young1}
 Their results seemed to indicate an exponential slowdown when solving a particular NP-Complete problem (Locked 1 in 3-SAT).\cite{young2}  This would suggest that an adiabatic quantum computer would \emph{not} be more powerful than a classical computer.
@@ -121,7 +121,7 @@ where $A(t)$ and $B(t)$ are dimensionless functions of time such that $A(0) = B(
 Given a ground state $\ket{psi_{gs}}$ of $\ham_{tot}$, the \emph{fidelity} ($\fid$) is the probability of measuring (after an anneal time $T$) $\psi_{gs}$, or $|\braket{\psi(T)|\psi_{gs}}|^2$.  If there are $N$ correct answer to our computation, and thus $\ket{\psi_N}$ degenerate ground states, the fidelity is defined as
 
 \begin{equation}
-	\fid = \sum_{i=0}^N \braket{\psi(T)|\psi_i}
+	\fid = \sum_{i=0}^N \left| \braket{\psi(T)|\psi_i} \right|^2
 \end{equation}
 
 For a perfectly annealed system, the fidelity should go to one as the annealing time increases.  Since any real annealing will not be in the infinite anneal time limit, in practice our fidelity values are restricted to be $\leq 1$.  Hence AQC is fundamentally a probabilistic process.  The closer the fidelity is to 1, the more likely our computation is to succeed.  We will use the fidelity later in the experimental results section to evaluate how close we get to ideal AQC.
@@ -136,7 +136,7 @@ However, in this work we restrict ourselves to evaluating straight line paths th
 For small Hamiltonian we can simulate directly the process of quantum annealing by integrating the Schr\"odinger equation. For time dependent Hamiltonians such as ours, the general form of the Schr\"odinger equation is 
 
 \begin{equation}
-	i\hbar\frac{\partial}{\partial t} \ket{\psi(t)} = \ham\ket{\psi(t)}
+	i\hbar\frac{\partial}{\partial t} \ket{\psi(t)} = \ham(t)\ket{\psi(t)}
 	\label{eq:num_int}
 \end{equation}
 
