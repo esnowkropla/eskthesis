@@ -79,13 +79,13 @@ The above clamp statement sets the value of the variables \texttt{a} and \texttt
 A complete \texttt{QSM} file might then look like
 
 \begin{center}
-	\texttt{(and (A $\sim$A) (C))}\\
+	\texttt{(and (A $\sim$B) (C))}\\
 	\texttt{(or (X Y) (B))}\\
 	\texttt{(clamp ((C +1)))}
 \end{center}
 which would compile to a Hamiltonian which encodes the logic $A \wedge \neg B = C, X \vee Y = B, C = \text{TRUE}$ and the resulting ground states will be those states for which the logic is satisfied.
 
-Figure \ref{fig:eg_embed} shows the shape of the resulting graph.  The node for $c$ is greyed out to represent the fact that it is clamped.  Each of the input sub-Hamiltonians (\texttt{and} and \texttt{or}) connect each of the spins they're given, and the resulting shape has node $B$ connected to every other node, $X$ and $Y$ connected to each other, and $A$ only connected to $B$.  This Hamiltonian graph does not have the same shape as the \machine graph, and so will have to be embedded in the following section.
+Figure \ref{fig:eg_embed} shows the shape of the resulting graph.  The node for $C$ is greyed out to represent the fact that it is clamped.  Each of the input sub-Hamiltonians (\texttt{and} and \texttt{or}) connect each of the spins they're given, and the resulting shape has node $B$ connected to every other node, $X$ and $Y$ connected to each other, and $A$ only connected to $B$.  This Hamiltonian graph does not have the same shape as the \machine graph, and so will have to be embedded in the following section.
 
 \begin{figure}
 	\begin{center}
