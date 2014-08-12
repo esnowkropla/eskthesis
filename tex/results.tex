@@ -31,7 +31,7 @@ Second, there is significant change in the fidelity over very small changes in a
 \end{table}
 
 \begin{figure}
-	\includegraphics{img/k44.eps}
+	\includegraphics{img/k44.png}
 	\caption[Single K44 Fidelity]{Fidelity as a function of anneal time for the Hamiltonian ``k44'' which consists of a single SAT clause embedded into a single qubyte.  The error bars are estimated from the standard deviation of a binomial distribution of the reads.}
 	\label{fig:k44_comparison}
 \end{figure}
@@ -57,7 +57,7 @@ Second, there is significant change in the fidelity over very small changes in a
 It was thought initially that the reason for the variability of the fidelity at short anneal times was due to the degeneracy of the ``k44'' Hamiltonian ground states.  The Hamiltonian ``k44\_and'' was created to be similar in form (same number of qubits) but having only a single ground state.  This Hamiltonian was evaluated for times ranging from 20 $\mu$s to 20 ms, with 4 runs taken at each time point and 100 reads per run.  Figure \ref{fig:results_avg} shows these results.  Each run produced as estimated fidelity as in Section \ref{sec:prog}, and the results shown here were synthesized by making a weighted average of each of the individual run's estimated fidelities.  The error bars shown here are the standard deviations of the means of the weighted averages, so small when the four runs produced nearly the same result and large when there was a large spread.  The weighting for each run is $w_i = \frac{1}{\sigma^2}$ where $\sigma$ is the standard deviation of each run.  The short time oscillations are not entirely removed, although our estimates of the standard deviation matches up to the observed data much better; the trend of the data points falls almost entirely within the error bars.
 
 \begin{figure}
-	\includegraphics{img/final_single_k44.eps}
+	\includegraphics{img/final_single_k44.png}
 	\caption[Averaged Anneal Results]{Fidelity vs anneal time with each data point averaged over four different runs for the single qubyte ``k44\_and'' with a clone coupling value of -9.  Each run was used to estimate the fidelity independently, with the final estimate the weighted average of each run.  The errorbars reflect the standard deviation of the distribution of estimates of the runs.}
 	\label{fig:results_avg}
 \end{figure}
@@ -69,7 +69,7 @@ It was thought initially that the reason for the variability of the fidelity at 
 \label{sec:coupling}
 
 \begin{figure}
-	\includegraphics{img/n_8_t_v_c.eps}
+	\includegraphics{img/n_8_t_v_c.png}
 	\caption[Variable Clone Coupling Fidelity]{Heat map of the fidelity as a function of anneal time and clone coupling value for the single qubyte ``k44\_and''.  The measured fidelity drops of rapidly with increasing clone coupling, but low clone coupling values do not preserve the ground state intact.  The sudden drop in fidelity at the smallest clone coupling value is caused by incorrect states with the same energy as the ground state.}
 	\label{fig:clone_coupling}
 \end{figure}
@@ -86,7 +86,7 @@ This means that when selecting a clone coupling value we must balance these two 
 The machine resolution problem is not necessarily the same from run to run; it could be that the compression of the problem Hamiltonian caused by the clone coupling value only makes it more likely for the machine to end up in an excited state.
 
 \begin{figure}
-	\includegraphics{img/t_c.eps}
+	\includegraphics{img/t_c.png}
 	\caption[Fidelity Standard Deviation]{Heat map of the standard deviation of the estimated fidelity as a function of clone coupling value and annealing time for the single qubyte ``k44\_and''.  After $\sim$ 1000 $\mu$s the error drops down as we enter the long-time regime and the short-time oscillations die off.  The spread of the fidelity is also much lower for a clone coupling value of -3, which corresponds to the higher fidelities.}
 	\label{fig:std_time}
 \end{figure}
@@ -101,13 +101,13 @@ The fidelity drops off strongly from its peak at a clone coupling value of -3.  
 The size scaling behaviour of ``k44\_and'' was also studied.  This was done by copy and pasting the fields and couplings over to new unit cells.  The resulting Hamiltonian still encodes the same SAT problem as the original ``k44\_and'', and still only has one ground state, but is able to be scaled from 1 to 55 qubytes, a range of 8 to 440 spins.  Figure \ref{fig:time_spins} shows the fidelity plotted against anneal time and number of spins, for the clone coupling value which maximizes fidelity (-3).  The same plot for other clone couplings looks similar but with lower fidelity values across the board.  Larger Hamiltonians show similar behaviour to the original one qubyte ``k44\_and'', but fall off even faster with increased anneal time.
 
 \begin{figure}
-	\includegraphics{img/pcolor_c_3.eps}
+	\includegraphics{img/pcolor_c_3.png}
 	\caption[Fidelity vs Time vs Number of Qubits]{Heat map of the estimated fidelity as a function of annealing time and number of spins in the Hamiltonian, with a clone coupling value of -3.}
 	\label{fig:time_spins}
 \end{figure}
 
 \begin{figure}
-	\includegraphics{img/trend.eps}
+	\includegraphics{img/trend.png}
 	\caption[Fidelity vs Number of Qubits]{Fidelity as a function of number of qubits for an anneal time of 20 $\mu$s and a clone coupling value of -3 as well as line of best fit.}
 	\label{fig:trend}
 \end{figure}
@@ -120,13 +120,13 @@ The last investigation was conducted on a six variable, 21 clause 3-SAT Hamilton
 Figure \ref{fig:test_6_hist} is a pair of histograms showing all 1000 results of annealing at 20 $\mu$s for both the ``6\_018'' Hamiltonian and the 3-SAT Hamiltonian.  The peak of the distribution for ``6\_018'' is near the ground state, while the peak of the distribution for the 3-SAT Hamiltonian is in the neighbourhood of the 10th excited state.  Presumably this is due to the energy levels of the 3-SAT Hamiltonian closing together where the ``6\_018'' levels do not.  The distribution of the results for the 3-SAT Hamiltonian is also broader, for reasons which are not clear.  Both of these Hamiltonians are much too large to be simulated classically, so we cannot predict how the energy levels change over the annealing to explain the distribution differences directly.
 
 \begin{figure}
-	\includegraphics{img/test_6.eps}
+	\includegraphics{img/test_6.png}
 	\caption[Result of a 6 Variable 3-SAT Instance]{This figure shows the estimated fidelity as a function of annealing time for a six variable, 21 clause 3-SAT instance.  The fidelity is essentially zero throughout the time range.}
 	\label{fig:test_6}
 \end{figure}
 
 \begin{figure}
-	\includegraphics{img/hist.eps}
+	\includegraphics{img/hist.png}
 	\caption[20 $\mu$s Result State Histograms]{Histograms showing all 1000 states found after 20 $\mu$s of annealing for both ``6\_018'' on the left and the 6 variable 3-SAT on the right.  The fidelity is clearly much higher on the left.  While the distribution of the ``6\_018'' results peaks near the ground state and decays exponentially, the 3-SAT results are peaked in the vicinity of the 10th excited state.}
 	\label{fig:test_6_hist}
 \end{figure}

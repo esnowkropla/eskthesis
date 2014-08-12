@@ -90,7 +90,7 @@ Figure \ref{fig:eg_embed} shows the shape of the resulting graph.  The node for 
 \begin{figure}
 	\begin{center}
 		\scalebox{0.5}{
-			\includegraphics{img/eg_embed.eps}
+			\includegraphics[bb = 0 0 313 258]{img/eg_embed.png}
 		}
 	\end{center}
 	\caption[Embedding example]{The shape of an example Hamiltonian as would be created by \texttt{QCC}.  This graph will not fit on the \machine, so in the next section we will demonstrate the embedding algorithm on it.}
@@ -106,7 +106,7 @@ Ideally, to ensure that each clone spin's ground state is the same as it's paren
 
 \begin{figure}
 	\begin{tabular}{l l l}
-		\includegraphics{img/eg_embed_full.eps} & \hspace{1 in} &\includegraphics{img/eg_embed_full2.eps} \\
+		\includegraphics[bb= 0 0 122 184]{img/eg_embed_full.png} & \hspace{1 in} &\includegraphics[bb= 0 0 122 184]{img/eg_embed_full2.png} \\
 	\end{tabular}
 	\caption[Embedding Algorithm]{This figure shows two steps in the embedding process.  On the left is the first step, assigning elements of the input graph (Figure \ref{fig:eg_embed}) along the diagonal of the \machine graph.  On the right is the connection step; nodes with the same colour share logical values.  Coloured lines represent the \emph{clone couplings}, while black lines represent the computational couplings.}
 	\label{fig:embedding}

@@ -83,7 +83,7 @@ We can find the energy of a state by multiplying each $h_i$ by the corresponding
 \begin{figure}
 	\begin{center}
 			\scalebox{0.5}{
-				\includegraphics{img/nand.eps}
+				\includegraphics[bb= 0 0 412 258]{img/nand.png}
 			} 
 	\end{center}
 	\caption[\texttt{NAND} Graph]{Graphical representation of the Hamiltonian implementing the logic of a \texttt{NAND} gate.  Each of the vertices is a spin and the number inside is the field value on that spin; each edge is the coupling value between the respective vertices.  Each ground state of this Hamiltonian enforces the logic $C = \neg(A \wedge B)$.}
@@ -158,7 +158,7 @@ where each $c_i(0) = 1/16$ (that is, an equal superposition) and we solve for al
 
 Figure \ref{fig:simulate} shows the results of this simulation.  The features correspond to what we expect from the adiabatic theorem: the fidelity starts low and climbs as the system evolves.  It does not reach one as we are not in the adiabatic limit because we are annealing for only a finite time.  We expect to see similar results to the one shown here from experimental data; deviations will show us how far our experiments depart from the assumptions of AQC.
 \begin{figure}
-	\includegraphics{img/simulate.eps}
+	\includegraphics[bb= 0 0 441 297]{img/simulate.png}
 	\caption[Simulated AQC]{Numerical simulation of adiabatic evolution by integrating the Schr\"odinger equation.}
 	\label{fig:simulate}
 \end{figure}
