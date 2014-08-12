@@ -1,5 +1,3 @@
-eskthesis.pdf
-eskthesis.ps
 eskthesis.ilg
 eskthesis.ist
 eskthesis.glo
@@ -8,7 +6,6 @@ eskthesis.gls
 *aux
 *log
 *blg
-*dvi
 *bbl
 *lof
 *lot
